@@ -103,3 +103,17 @@ class MACD:
         self.fast_ma = ma.sma(self.source, self.fast_length)
         self.slow_ma = ma.sma(self.source, self.slow_length)
 
+    @property
+    def get_histogram(self) -> pd.DataFrame:
+        """
+        Calculate the MACD histogram.
+
+        Returns:
+        --------
+        pd.DataFrame
+            A DataFrame containing the MACD histogram values.
+        """
+        macd = (self.fast_ma - self.slow_ma).dropna()
+        macd_signal = ma.ema(macd, self.signal_length)
+        histogram = macd - macd_signal
+        return histogram
