@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 os.chdir("../")
-os.getcwd()
 
 from indicators import (
     RSI,
