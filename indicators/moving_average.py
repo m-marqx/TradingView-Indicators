@@ -26,3 +26,23 @@ class MovingAverage:
         of the input time series data.
     """
 
+    def sma(self, source: pd.Series, length: int) -> pd.Series:
+        """
+        Calculate the Simple Moving Average (SMA)
+        of the input time series data.
+
+        Parameters:
+        -----------
+        source : pd.Series
+            The time series data to calculate the SMA for.
+        length : int
+            The number of periods to include in the SMA calculation.
+
+        Returns:
+        --------
+        pd.Series
+            The calculated SMA time series data.
+        """
+        sma = source.rolling(length).mean()
+        return sma.dropna(axis=0)
+
