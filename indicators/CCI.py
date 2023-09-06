@@ -103,3 +103,16 @@ class CCI:
 
         return self
 
+    def set_ema(self):
+        """
+        Set the Exponential Moving Average (EMA) for the CCI calculation.
+
+        Returns:
+        --------
+        CCI
+            The CCI object.
+        """
+        self.ma = ma.ema(self.source, self.length).to_numpy()
+
+        return self
+
