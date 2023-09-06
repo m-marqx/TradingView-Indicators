@@ -99,3 +99,7 @@ class MACD:
         self.fast_ma = ma.ema(self.source, self.fast_length)
         self.slow_ma = ma.ema(self.source, self.slow_length)
 
+    def __set_sma(self) -> None:
+        self.fast_ma = ma.sma(self.source, self.fast_length)
+        self.slow_ma = ma.sma(self.source, self.slow_length)
+
