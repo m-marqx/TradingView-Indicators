@@ -97,4 +97,45 @@ class DMI:
         )
         return true_range
 
+    def adx(
+        self,
+        adx_smoothing: int = 14,
+        di_length: int = 14
+    ) -> tuple[pd.Series, pd.Series, pd.Series]:
+        """
+        Calculate the Average Directional Index (ADX) and related
+        directional movement values.
+
+        Parameters:
+        -----------
+        adx_smoothing : int, optional
+            The smoothing period for calculating the ADX.
+            (default: 14)
+        di_length : int, optional
+            The length of the directional movement indicator (DI) period.
+            (default: 14)
+
+        Returns:
+        --------
+        tuple[pd.Series, pd.Series, pd.Series]
+            A tuple containing the ADX, Positive Directional Movement
+            (+DI), and Negative Directional Movement (-DI) values.
+        """
+        trur = ma.rma(self.true_range().dropna(), di_length)
+
+        up = self.high.diff().dropna()
+        down = -self.low.diff().dropna()
+
+        plusDM = up.where((up > down) & (up > 0), 0)
+        minusDM = down.where((down > up) & (down > 0), 0)
+
+        plus = 100 * ma.rma(plusDM, di_length) / trur
+        minus = 100 * ma.rma(minusDM, di_length) / trur
+
+        sumDM = plus + minus
+        subDM = abs(plus - minus)
+
+        adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
+        return adx, plus, minus
+
 
