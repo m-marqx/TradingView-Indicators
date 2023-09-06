@@ -109,3 +109,27 @@ class SlowStochastic:
 
         self.length = length
 
+    def stoch(self, length) -> pd.Series:
+        """
+        Calculate the Fast Stochastic Oscillator values for the given
+        period length.
+
+        Parameters:
+        -----------
+        length : int
+            The length of the stochastic period.
+
+        Returns:
+        --------
+        pd.Series
+            The Fast Stochastic Oscillator values.
+        """
+        lowest_low = self.low.rolling(length).min()
+        hightest_high = self.high.rolling(length).max()
+        stochastic = (
+            100
+            * (self.source - lowest_low)
+            / (hightest_high - lowest_low)
+        )
+        return stochastic
+
