@@ -89,3 +89,17 @@ class CCI:
 
         return self.df["CCI"].dropna(axis=0, inplace=True)
 
+    def set_sma(self):
+        """
+        Set the Simple Moving Average (SMA) for the CCI calculation.
+
+        Returns:
+        --------
+        CCI
+            The CCI object.
+        """
+        self.window = np.ones(self.length) / self.length
+        self.ma = np.convolve(self.source_arr, self.window, mode="valid")
+
+        return self
+
