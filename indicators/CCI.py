@@ -49,3 +49,43 @@ class CCI:
         self.source = source
         self.length = length
 
+    def CCI_precise(
+        self,
+        smooth_column: str = "sma",
+        constant: float = 0.015,
+    ) -> pd.Series:
+        """
+        Calculate CCI using a precise method.
+        this version have more similar results from excel
+        than the standard version and TA-lib.
+
+        Parameters:
+        -----------
+        smooth_column : str, optional
+            The column to use for smoothing, by default "sma".
+        constant : float, optional
+            The constant factor for CCI calculation, by default 0.015.
+
+        Returns:
+        --------
+        CCI
+            The CCI object.
+        """
+
+        self.df = pd.DataFrame()
+        self.df["TP"] = self.source_arr
+        self.df["sma"] = self.df["TP"].rolling(self.length).mean()
+
+        self.df["mad"] = (
+            self.df["TP"]
+            .rolling(self.length)
+            .apply(lambda x: (pd.Series(x) - pd.Series(x).mean()).abs().mean())
+        )
+
+        self.df["CCI"] = (
+            (self.df["TP"] - self.df[smooth_column])
+            / (constant * self.df["mad"])
+        )
+
+        return self.df["CCI"].dropna(axis=0, inplace=True)
+
