@@ -95,3 +95,7 @@ class MACD:
         else:
             raise ValueError(f"'{method}' is not a valid method.")
 
+    def __set_ema(self) -> None:
+        self.fast_ma = ma.ema(self.source, self.fast_length)
+        self.slow_ma = ma.ema(self.source, self.slow_length)
+
