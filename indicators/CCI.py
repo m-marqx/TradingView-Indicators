@@ -116,3 +116,33 @@ class CCI:
 
         return self
 
+    def CCI(self, constant: float = 0.015) -> pd.DataFrame:
+        """
+        Calculate CCI using the specified method.
+
+        Parameters:
+        -----------
+        constant : float, optional
+            The constant factor for CCI calculation, by default 0.015.
+
+        Returns:
+        --------
+        pd.DataFrame
+            The calculated CCI data as a DataFrame.
+        """
+        self.window = np.lib.stride_tricks.sliding_window_view(self.source_arr, self.length)
+        self.mean_window = np.mean(self.window, axis=1)
+        self.abs_diff = np.abs(self.window - self.mean_window[:, np.newaxis])
+
+        self.mad = np.mean(self.abs_diff, axis=1)
+
+        self.df = pd.DataFrame()
+        self.df["source"] = self.source[self.length - 1 :]
+        self.df["mad"] = self.mad
+        self.df["ma"] = self.ma
+        self.df["CCI"] = (
+            (self.df["source"] - self.df["ma"])
+            / (constant * self.df["mad"])
+        )
+
+        return self.df
