@@ -1,3 +1,5 @@
+Se você quiser ler em português basta [clicar aqui](https://github.com/m-marqx/TradingView-Indicators/blob/main/readme%20-%20pt-br.md)
+
 ## Objective
 
 The initial objective of this repository was to create technical analysis indicators in a way that they would be easy to maintain and highly modular. It was observed that the initial values of the indicators, both by [TA-Lib](https://github.com/TA-Lib/ta-lib-python) and pandas, had some inaccuracies and needed adjustments. With this in mind, I created this repository specifically to address this issue of inaccuracy.
