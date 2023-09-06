@@ -75,3 +75,26 @@ class DMI:
                 self.low = dataframe["low"]
         else:
             self.low = dataframe[low]
+
+    def true_range(self) -> pd.Series:
+        """
+        Calculate the True Range (TR) values for the given data.
+
+        True Range is the greatest of the following three values:
+        1. The current high minus the current low.
+        2. The absolute value of the current high minus the previous close.
+        3. The absolute value of the current low minus the previous close.
+
+        Returns:
+        --------
+        pd.Series
+            The True Range (TR) values.
+        """
+        true_range = np.maximum(
+            self.high - self.low,
+            abs(self.high - self.source.shift()),
+            abs(self.low - self.source.shift())
+        )
+        return true_range
+
+
