@@ -133,3 +133,45 @@ class SlowStochastic:
         )
         return stochastic
 
+    def slow_stoch(
+        self,
+        k_length: int = 14,
+        k_smoothing: int = 1,
+        d_smoothing: int = 3,
+        smoothing_method: Literal["sma", "ema"] = "sma",
+    ) -> tuple[pd.Series, pd.Series]:
+        """
+        Calculate the Slow Stochastic Oscillator values using the
+        specified parameters.
+
+        Parameters:
+        -----------
+        k_length : int, optional
+            The length of the %K line period.
+            (default: 14)
+        k_smoothing : int, optional
+            The smoothing period for the %K line.
+            (default: 1)
+        d_smoothing : int, optional
+            The smoothing period for the %D line.
+            (default: 3)
+        smoothing_method : Literal["sma", "ema"], optional
+            The smoothing method to use for calculations, either 'sma'
+            (Simple Moving Average) or 'ema'
+            (Exponential Moving Average).
+            (default: 'sma')
+
+        Returns:
+        --------
+        tuple[pd.Series, pd.Series]
+            A tuple containing the %K line and %D line values.
+        """
+        if smoothing_method == "sma":
+            k = ma.sma(self.stoch(k_length), k_smoothing)
+            d = ma.sma(k, d_smoothing)
+        elif smoothing_method == "ema":
+            k = ma.ema(self.stoch(k_length), k_smoothing)
+            d = ma.ema(k, d_smoothing)
+        else:
+            raise ValueError("Method must be either 'sma' or 'ema'.")
+        return k, d
