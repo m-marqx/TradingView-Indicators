@@ -145,3 +145,50 @@ class MovingAverage:
             .mean()
         ).rename("RMA")
 
+    def _rma_python(
+        self,
+        source: pd.Series,
+        length: int
+    ) -> pd.Series:
+        """
+        Calculate the Relative Moving Average (RMA) of the input time series
+        data using pure python.
+
+        Parameters:
+        -----------
+        source : pandas.Series
+            The time series data to calculate the RMA for.
+        length : int
+            The number of periods to include in the RMA calculation.
+
+        Returns:
+        --------
+        pd.Series
+            The calculated RMA time series data.
+
+        Note:
+        -----
+        The pure python version is the only one with precision in the
+        initial RMA values. However, with the simple RMA version,
+        both pandas and python versions will yield the same precision
+        in initial values.
+        """
+        alpha = 1 / length
+        source_pd = self._rma_pandas(source, length)[:length]
+        source_values = source[length:].to_numpy().tolist()
+
+        rma = float(source_pd.dropna().iloc[0])
+        rma_list = [rma]
+
+        for source_value in source_values:
+            rma = alpha * source_value + (1 - alpha) * rma
+            rma_list.append(rma)
+
+        rma_series = pd.Series(
+            rma_list,
+            name="RMA",
+            index=source[length - 1:].index
+        )
+
+        return rma_series
+
