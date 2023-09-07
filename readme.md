@@ -4,26 +4,31 @@ Se você quiser ler em português basta [clicar aqui](https://github.com/m-marqx
 
 The initial objective of this repository was to create technical analysis indicators in a way that they would be easy to maintain and highly modular. It was observed that the initial values of the indicators, both by [TA-Lib](https://github.com/TA-Lib/ta-lib-python) and pandas, had some inaccuracies and needed adjustments. With this in mind, I created this repository specifically to address this issue of inaccuracy.
 
-## Dependencies
+## Installation
 
-To use TradingView-Indicators, there is a dependency on the `pandas` and `numpy` libraries. To install them if you don't already have them, simply run `pip install -r requirements.txt`.
+To install TradingView Indicators, you need to use the package manager [pip](https://pip.pypa.io/en/stable/):
+
+```
+pip install tradingview-indicators
+```
+
 
 ## Example
 
 ```python
-from indicators import (
-    RSI,
-    MACD,
-    DMI,
-)
+import pandas as pd
+import tradingview_indicators as ta
 
-df = pd.read_csv("example/BTCUSDT_1d_spot.csv")
+df = pd.read_csv("BTCUSDT_1d_spot.csv")
 source = df["close"].copy()
-df["RSI"] = RSI(source, 14)
-df["MACD"] = MACD(source, 12, 26, 9).get_histogram
-df["ADX"] = DMI(df).adx()[0]
-df["DI+"] = DMI(df).adx()[1]
-df["DI-"] = DMI(df).adx()[2]
-df["DI_Delta"] = DMI(df).di_delta()[0]
-df["DI_Ratio"] = DMI(df).di_delta()[1]
+df["RSI"] = ta.RSI(source, 14)
+df["MACD"] = ta.MACD(source, 12, 26, 9).get_histogram
+
+dmi = ta.DMI(df, "close")
+
+df["ADX"] = dmi.adx()[0]
+df["DI+"] = dmi.adx()[1]
+df["DI-"] = dmi.adx()[2]
+df["DI_Delta"] = dmi.di_delta()[0]
+df["DI_Ratio"] = dmi.di_delta()[1]
 ```
