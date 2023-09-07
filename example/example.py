@@ -1,19 +1,12 @@
 import pandas as pd
-import os
-os.chdir("../")
+import tradingview_indicators as ta
 
-from indicators import (
-    RSI,
-    MACD,
-    DMI,
-)
-
-df = pd.read_csv("example/BTCUSDT_1d_spot.csv")
+df = pd.read_csv("BTCUSDT_1d_spot.csv")
 source = df["close"].copy()
-df["RSI"] = RSI(source, 14)
-df["MACD"] = MACD(source, 12, 26, 9).get_histogram
+df["RSI"] = ta.RSI(source, 14)
+df["MACD"] = ta.MACD(source, 12, 26, 9).get_histogram
 
-dmi = DMI(df, "close")
+dmi = ta.DMI(df, "close")
 
 df["ADX"] = dmi.adx()[0]
 df["DI+"] = dmi.adx()[1]
