@@ -1,3 +1,4 @@
+## PT-BR
 Se você quiser ler em português basta [clicar aqui](https://github.com/m-marqx/TradingView-Indicators/blob/main/readme%20-%20pt-br.md)
 
 ## Objective
