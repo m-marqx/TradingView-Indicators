@@ -136,6 +136,10 @@ class DMI:
         subDM = abs(plus - minus)
 
         adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
+
+        plus = plus.rename("DI+")
+        minus = minus.rename("DI-")
+        adx = adx.rename("ADX")
         return adx, plus, minus
 
     def di_difference(
