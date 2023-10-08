@@ -138,7 +138,7 @@ class DMI:
         adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
         return adx, plus, minus
 
-    def di_delta(
+    def di_difference(
         self,
         adx_smoothing=14,
         di_length=14,
@@ -164,4 +164,6 @@ class DMI:
             the ratio of +DI to -DI.
         """
         _, plus, minus = self.adx(adx_smoothing, di_length)
-        return plus - minus, plus / minus
+        di_delta = (plus - minus).rename("DI_Delta")
+        di_ratio = (plus / minus).rename("DI_Ratio")
+        return di_delta, di_ratio
