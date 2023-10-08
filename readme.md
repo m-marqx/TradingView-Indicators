@@ -30,6 +30,6 @@ dmi = ta.DMI(df, "close")
 df["ADX"] = dmi.adx()[0]
 df["DI+"] = dmi.adx()[1]
 df["DI-"] = dmi.adx()[2]
-df["DI_Delta"] = dmi.di_delta()[0]
-df["DI_Ratio"] = dmi.di_delta()[1]
+df["DI_Delta"] = dmi.di_difference()[0]
+df["DI_Ratio"] = dmi.di_difference()[1]
 ```
