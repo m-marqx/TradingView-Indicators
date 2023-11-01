@@ -1,5 +1,5 @@
 import pandas as pd
-from utils import OHLC_finder
+from .utils import OHLC_finder
 
 def Ichimoku(
     dataframe: pd.DataFrame,
