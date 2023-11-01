@@ -147,17 +147,16 @@ class Ichimoku:
 
         ichimoku_clouds = pd.DataFrame()
 
-        ichimoku_clouds['conversion_line'] =  conversion_line
-        ichimoku_clouds['base_line'] = base_line
-        ichimoku_clouds['lagging_span'] = lagging_span
+        ichimoku_clouds["conversion_line"] = conversion_line
+        ichimoku_clouds["base_line"] = base_line
+        ichimoku_clouds["lagging_span"] = lagging_span
 
-        ichimoku_clouds['lead_line1'] = lead_line1
-        ichimoku_clouds['lead_line2'] = lead_line2
+        ichimoku_clouds["lead_line1"] = lead_line1
+        ichimoku_clouds["lead_line2"] = lead_line2
 
-        ichimoku_clouds['leading_span_a'] = leading_span_a
-        ichimoku_clouds['leading_span_b'] = leading_span_b
+        ichimoku_clouds["leading_span_a"] = leading_span_a
+        ichimoku_clouds["leading_span_b"] = leading_span_b
         return ichimoku_clouds
-
 
     def _donchian(self, length) -> pd.Series:
         """
