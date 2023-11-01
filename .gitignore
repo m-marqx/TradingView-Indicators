@@ -153,3 +153,4 @@ cython_debug/
 
 # Setup
 setup.py
+README.md
