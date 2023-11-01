@@ -83,7 +83,7 @@ class Ichimoku:
             else:
                 self.close = dataframe["close"]
         else:
-            self.close = dataframe[low]
+            self.close = dataframe[close]
 
     def ichimoku_clouds(
         self,
@@ -179,4 +179,3 @@ class Ichimoku:
         max_rolling = self.high.rolling(length).max()
         min_rolling = self.low.rolling(length).min()
         return (max_rolling + min_rolling) / 2
-
