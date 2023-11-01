@@ -1,4 +1,6 @@
 import pandas as pd
+from utils import OHLC_finder
+
 
 class Ichimoku:
     """
@@ -14,6 +16,7 @@ class Ichimoku:
         The close prices from the DataFrame.
 
     """
+
     def __init__(
         self,
         dataframe: pd.DataFrame,
@@ -42,48 +45,9 @@ class Ichimoku:
             data. If not provided, it will be inferred from common
             column names.
         """
-        if not isinstance(dataframe, pd.DataFrame):
-            raise ValueError("dataframe param must be a DataFrame")
-
-        ohlc_columns_lowercase = ['open', 'high', 'low', 'close']
-        ohlc_columns_uppercase = ['Open', 'High', 'Low', 'Close']
-
-        is_ohlc_columns_lowercase = all(
-            column in dataframe.columns
-            for column in ohlc_columns_lowercase
+        _, self.high, self.low, self.close = OHLC_finder(
+            dataframe, High=high, Low=low, Close=close
         )
-
-        is_ohlc_columns_uppercase = all(
-            column in dataframe.columns
-            for column in ohlc_columns_uppercase
-        )
-
-        if not is_ohlc_columns_lowercase and not is_ohlc_columns_uppercase:
-            raise ValueError("OHLC columns not found in dataframe")
-
-        if high is None:
-            if "High" in dataframe.columns:
-                self.high = dataframe["High"]
-            else:
-                self.high = dataframe["high"]
-        else:
-            self.high = dataframe[high]
-
-        if low is None:
-            if "Low" in dataframe.columns:
-                self.low = dataframe["Low"]
-            else:
-                self.low = dataframe["low"]
-        else:
-            self.low = dataframe[low]
-
-        if close is None:
-            if "Close" in dataframe.columns:
-                self.close = dataframe["Close"]
-            else:
-                self.close = dataframe["close"]
-        else:
-            self.close = dataframe[close]
 
     def ichimoku_clouds(
         self,
