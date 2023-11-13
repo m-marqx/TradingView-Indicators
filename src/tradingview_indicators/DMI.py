@@ -49,22 +49,50 @@ class DMI:
         if not isinstance(dataframe, pd.DataFrame):
             raise ValueError("dataframe param must be a DataFrame")
 
-        if not isinstance(source, str):
-            raise ValueError("source param must be a string")
+        ohlc_columns_lowercase = ['high', 'low', 'close']
+        ohlc_columns_uppercase = ['High', 'Low', 'Close']
+        source_columns = [source, high, low]
+
+        is_na_source = all(
+            source is None
+            for source in source_columns
+        )
+
+        is_hlc_columns_lowercase = all(
+            column in dataframe.columns
+            for column in ohlc_columns_lowercase
+        )
+
+        is_ohlc_columns_uppercase = all(
+            column in dataframe.columns
+            for column in ohlc_columns_uppercase
+        )
+
+        columns_not_found = (
+            not is_hlc_columns_lowercase
+            and not is_ohlc_columns_uppercase
+        )
+
+        if is_na_source and columns_not_found:
+            raise ValueError("OHLC columns not found in dataframe")
 
         if source is None:
             if "Close" in dataframe.columns:
-                self.source = dataframe["Close"]
+                self.close = dataframe["Close"]
             elif "close" in dataframe.columns:
-                self.source = dataframe["close"]
+                self.close = dataframe["close"]
+            else:
+                self.close = None
         else:
-            self.source = dataframe[source]
+            self.close = dataframe[source]
 
         if high is None:
             if "High" in dataframe.columns:
                 self.high = dataframe["High"]
             elif "high" in dataframe.columns:
                 self.high = dataframe["high"]
+            else:
+                self.high = None
         else:
             self.high = dataframe[high]
 
@@ -73,8 +101,11 @@ class DMI:
                 self.low = dataframe["Low"]
             elif "low" in dataframe.columns:
                 self.low = dataframe["low"]
+            else:
+                self.low = None
         else:
             self.low = dataframe[low]
+
 
     def true_range(self) -> pd.Series:
         """
