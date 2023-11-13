@@ -33,6 +33,12 @@ def OHLC_finder(
 
     ohlc_columns_lowercase = ['open', 'high', 'low', 'close']
     ohlc_columns_uppercase = ['Open', 'High', 'Low', 'Close']
+    source_columns = [Open, High, Low, Close]
+
+    is_na_source = all(
+        source is None
+        for source in source_columns
+    )
 
     is_ohlc_columns_lowercase = all(
         column in dataframe.columns
@@ -44,7 +50,12 @@ def OHLC_finder(
         for column in ohlc_columns_uppercase
     )
 
-    if not is_ohlc_columns_lowercase and not is_ohlc_columns_uppercase:
+    columns_not_found = (
+        not is_ohlc_columns_lowercase
+        and not is_ohlc_columns_uppercase
+    )
+
+    if is_na_source and columns_not_found:
         raise ValueError("OHLC columns not found in dataframe")
 
     if Open is None:
