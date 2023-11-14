@@ -9,8 +9,8 @@ class DMI:
     """
     Attributes:
     -----------
-    source : pd.Series
-        The source values from the DataFrame.
+    close : pd.Series
+        The close values from the DataFrame.
     high : pd.Series
         The high prices from the DataFrame.
     low : pd.Series
@@ -22,7 +22,7 @@ class DMI:
     def __init__(
         self,
         dataframe: pd.DataFrame,
-        source: str = None,
+        close: str = None,
         high: str = None,
         low: str = None,
     ) -> None:
@@ -33,9 +33,9 @@ class DMI:
         Parameters:
         -----------
         dataframe : pd.DataFrame
-            The DataFrame containing the source, high, and low data.
-        source : str
-            The column name in the DataFrame representing the source
+            The DataFrame containing the close, high, and low data.
+        close : str
+            The column name in the DataFrame representing the close
             data.
         high : str, optional
             The column name in the DataFrame representing the high
@@ -51,11 +51,11 @@ class DMI:
 
         ohlc_columns_lowercase = ['high', 'low', 'close']
         ohlc_columns_uppercase = ['High', 'Low', 'Close']
-        source_columns = [source, high, low]
+        source_columns = [close, high, low]
 
         is_na_source = all(
-            source is None
-            for source in source_columns
+            close is None
+            for close in source_columns
         )
 
         is_hlc_columns_lowercase = all(
@@ -76,7 +76,7 @@ class DMI:
         if is_na_source and columns_not_found:
             raise ValueError("OHLC columns not found in dataframe")
 
-        if source is None:
+        if close is None:
             if "Close" in dataframe.columns:
                 self.close = dataframe["Close"]
             elif "close" in dataframe.columns:
@@ -84,7 +84,7 @@ class DMI:
             else:
                 self.close = None
         else:
-            self.close = dataframe[source]
+            self.close = dataframe[close]
 
         if high is None:
             if "High" in dataframe.columns:
@@ -123,8 +123,8 @@ class DMI:
         """
         true_range = np.maximum(
             self.high - self.low,
-            abs(self.high - self.source.shift()),
-            abs(self.low - self.source.shift())
+            abs(self.high - self.close.shift()),
+            abs(self.low - self.close.shift())
         )
         return true_range
 
