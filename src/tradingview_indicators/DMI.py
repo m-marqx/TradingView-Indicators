@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
-from .moving_average import MovingAverage
-
-ma = MovingAverage()
+from .moving_average import rma
 
 
 class DMI:
@@ -152,7 +150,7 @@ class DMI:
             A tuple containing the ADX, Positive Directional Movement
             (+DI), and Negative Directional Movement (-DI) values.
         """
-        trur = ma.rma(self.true_range().dropna(), di_length)
+        trur = rma(self.true_range().dropna(), di_length)
 
         up = self.high.diff().dropna()
         down = -self.low.diff().dropna()
@@ -160,13 +158,13 @@ class DMI:
         plusDM = up.where((up > down) & (up > 0), 0)
         minusDM = down.where((down > up) & (down > 0), 0)
 
-        plus = 100 * ma.rma(plusDM, di_length) / trur
-        minus = 100 * ma.rma(minusDM, di_length) / trur
+        plus = 100 * rma(plusDM, di_length) / trur
+        minus = 100 * rma(minusDM, di_length) / trur
 
         sumDM = plus + minus
         subDM = abs(plus - minus)
 
-        adx = 100 * ma.rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
+        adx = 100 * rma(subDM / sumDM.where(sumDM != 0, 1), adx_smoothing)
 
         plus = plus.rename("DI+")
         minus = minus.rename("DI-")

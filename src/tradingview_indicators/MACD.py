@@ -1,8 +1,6 @@
 from typing import Literal
 import pandas as pd
-from .moving_average import MovingAverage
-
-ma = MovingAverage()
+from .moving_average import sma, ema
 
 
 class MACD:
@@ -96,12 +94,12 @@ class MACD:
             raise ValueError(f"'{method}' is not a valid method.")
 
     def __set_ema(self) -> None:
-        self.fast_ma = ma.ema(self.source, self.fast_length)
-        self.slow_ma = ma.ema(self.source, self.slow_length)
+        self.fast_ma = ema(self.source, self.fast_length)
+        self.slow_ma = ema(self.source, self.slow_length)
 
     def __set_sma(self) -> None:
-        self.fast_ma = ma.sma(self.source, self.fast_length)
-        self.slow_ma = ma.sma(self.source, self.slow_length)
+        self.fast_ma = sma(self.source, self.fast_length)
+        self.slow_ma = sma(self.source, self.slow_length)
 
     @property
     def get_histogram(self) -> pd.DataFrame:
@@ -114,6 +112,6 @@ class MACD:
             A DataFrame containing the MACD histogram values.
         """
         macd = (self.fast_ma - self.slow_ma).dropna()
-        macd_signal = ma.ema(macd, self.signal_length)
+        macd_signal = ema(macd, self.signal_length)
         histogram = macd - macd_signal
         return histogram

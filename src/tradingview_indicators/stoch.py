@@ -1,8 +1,6 @@
 from typing import Literal
 import pandas as pd
-from .moving_average import MovingAverage
-
-ma = MovingAverage()
+from .moving_average import sma, ema
 
 
 class SlowStochastic:
@@ -167,11 +165,11 @@ class SlowStochastic:
             A tuple containing the %K line and %D line values.
         """
         if smoothing_method == "sma":
-            k = ma.sma(self.stoch(k_length), k_smoothing)
-            d = ma.sma(k, d_smoothing)
+            k = sma(self.stoch(k_length), k_smoothing)
+            d = sma(k, d_smoothing)
         elif smoothing_method == "ema":
-            k = ma.ema(self.stoch(k_length), k_smoothing)
-            d = ma.ema(k, d_smoothing)
+            k = ema(self.stoch(k_length), k_smoothing)
+            d = ema(k, d_smoothing)
         else:
             raise ValueError("Method must be either 'sma' or 'ema'.")
         return k, d

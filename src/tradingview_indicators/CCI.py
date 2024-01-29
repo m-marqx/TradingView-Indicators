@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
-from .moving_average import MovingAverage
-
-ma = MovingAverage()
+from .moving_average import ema
 
 
 class CCI:
@@ -112,7 +110,7 @@ class CCI:
         CCI
             The CCI object.
         """
-        self.ma = ma.ema(self.source, self.length).to_numpy()
+        self.ma = ema(self.source, self.length).to_numpy()
 
         return self
 

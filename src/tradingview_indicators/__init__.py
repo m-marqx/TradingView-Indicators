@@ -1,4 +1,4 @@
-from .moving_average import MovingAverage
+from .moving_average import sma, rma, ema, sema, rma
 from .CCI import CCI
 from .MACD import MACD
 from .RSI import RSI

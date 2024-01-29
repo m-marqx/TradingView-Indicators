@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
-from .moving_average import MovingAverage
-
-ma = MovingAverage()
-
+from .moving_average import rma
 
 def RSI(source: pd.Series, periods: int=14) -> pd.Series:
     """
@@ -28,8 +25,8 @@ def RSI(source: pd.Series, periods: int=14) -> pd.Series:
     ).dropna()
 
     relative_strength = (
-        ma.rma(upward_diff, periods)
-        / ma.rma(downward_diff, periods)
+        rma(upward_diff, periods)
+        / rma(downward_diff, periods)
     )
 
     rsi = 100 - (100 / (1 + relative_strength))
