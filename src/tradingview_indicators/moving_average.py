@@ -39,14 +39,15 @@ def ema(source: pd.Series, length: int) -> pd.Series:
     pandas.Series
         The calculated EMA time series data.
     """
-    sma = source.rolling(window=length, min_periods=length).mean()[:length]
+    sma_series = source.rolling(window=length, min_periods=length).mean()[:length]
     rest = source[length:]
     return (
-        pd.concat([sma, rest])
+        pd.concat([sma_series, rest])
         .ewm(span=length, adjust=False)
         .mean()
         .dropna(axis=0)
     )
+
 
 def sema(source: pd.Series, length: int, smooth: int) -> pd.Series:
     """
