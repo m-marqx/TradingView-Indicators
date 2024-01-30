@@ -114,10 +114,16 @@ def _rma_pandas(
     -----
     The first values are different from the TradingView RMA.
     """
-    sma = source.rolling(window=length, min_periods=length).mean()[:length]
+    sma_series = (
+        source
+        .rolling(window=length, min_periods=length)
+        .mean()[:length]
+    )
+
     rest = source[length:]
+
     return (
-        pd.concat([sma, rest])
+        pd.concat([sma_series, rest])
         .ewm(alpha=1 / length, **kwargs)
         .mean()
     ).rename("RMA")
