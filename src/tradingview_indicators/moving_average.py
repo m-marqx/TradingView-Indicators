@@ -82,8 +82,9 @@ def sema(source: pd.Series, length: int, smooth: int) -> pd.Series:
         * smooth
         + emas_df[emas_df.columns[-1]]
     )
-    sema = emas_df["sema"]
-    return sema.dropna(axis=0)
+    sema_series = emas_df["sema"]
+    return sema_series.dropna(axis=0)
+
 
 def _rma_pandas(
     source: pd.Series,
