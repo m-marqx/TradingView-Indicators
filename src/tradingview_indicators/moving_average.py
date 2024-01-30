@@ -19,8 +19,8 @@ def sma(source: pd.Series, length: int) -> pd.Series:
     pd.Series
         The calculated SMA time series data.
     """
-    sma = source.rolling(length).mean()
-    return sma.dropna(axis=0)
+    sma_series = source.rolling(length).mean()
+    return sma_series.dropna(axis=0)
 
 def ema(source: pd.Series, length: int) -> pd.Series:
     """
