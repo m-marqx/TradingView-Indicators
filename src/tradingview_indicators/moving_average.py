@@ -159,12 +159,12 @@ def _rma_python(
     source_pd = _rma_pandas(source, length)[:length]
     source_values = source[length:].to_numpy().tolist()
 
-    rma = float(source_pd.dropna().iloc[0])
-    rma_list = [rma]
+    rma_series = float(source_pd.dropna().iloc[0])
+    rma_list = [rma_series]
 
     for source_value in source_values:
-        rma = alpha * source_value + (1 - alpha) * rma
-        rma_list.append(rma)
+        rma_series = alpha * source_value + (1 - alpha) * rma_series
+        rma_list.append(rma_series)
 
     rma_series = pd.Series(
         rma_list,
