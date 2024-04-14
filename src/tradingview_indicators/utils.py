@@ -148,6 +148,7 @@ class DynamicTimeWarping:
         else:
             x_series = self.dtw_df[self.column_x]
             y_series = self.dtw_df[self.column_y]
+
         match method:
             case "ratio":
                 return x_series / y_series
@@ -173,7 +174,7 @@ class DynamicTimeWarping:
         if len(self.input_x) > len(self.input_y):
             x_source = x_source.reindex(self.input_y.index)
         elif len(self.input_x) < len(self.input_y):
-            y_source = y_source.reindex(x_source.index)
+            y_source = y_source.reindex(self.input_x.index)
 
         dtw_df = DynamicTimeWarping(x_source, y_source).dtw_df
 
@@ -189,8 +190,9 @@ class DynamicTimeWarping:
         )
 
         x_series.index = x_source.dropna().index
-        y_series.index = self.input_y.dropna().index
+        y_series.index = y_source.dropna().index
         return x_series, y_series
+
 
 def OHLC_finder(
     dataframe: pd.DataFrame,
