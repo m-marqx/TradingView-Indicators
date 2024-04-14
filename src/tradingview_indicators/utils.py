@@ -2,7 +2,8 @@ from typing import Literal
 import pandas as pd
 import numpy as np
 import fastdtw
-from utils.exceptions import InvalidArgumentError
+from .errors_exceptions import InvalidArgumentError
+
 
 class DynamicTimeWarping:
     """Class for computing Dynamic Time Warping (DTW).
