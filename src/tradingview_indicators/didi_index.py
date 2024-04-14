@@ -4,6 +4,42 @@ from .moving_average import sma, ema, sema, rma
 from .utils import DynamicTimeWarping
 
 class DidiIndex:
+    """
+    The DidiIndex class calculates the Didi Index, which is a technical
+    indicator used in financial analysis. It calculates the absolute and
+    ratio values of the Didi Index, as well as the Dynamic Time Warping
+    (DTW) of the absolute value.
+
+    Parameters:
+    -----------
+    source : pd.Series
+        The time series data to calculate the Didi Index for.
+    short_length : int
+        The number of periods to include in the short moving average
+        calculation.
+    mid_length : int
+        The number of periods to include in the mid moving average
+        calculation.
+    long_length : int
+        The number of periods to include in the long moving average
+        calculation.
+    method : Literal["sma", "ema", "sema", "rma"], optional
+        The method to use for the moving average calculation.
+        (default: "ema")
+
+    Methods:
+    --------
+    absolute() -> pd.Series:
+        Calculate the Didi Index absolute.
+
+    ratio() -> pd.Series:
+        Calculate the Didi Index ratio.
+
+    dtw(method:str = 'absolute') -> pd.Series:
+        Calculate the Dynamic Time Warping (DTW) of the Didi Index
+        absolute.
+    """
+
     def __init__(
         self,
         source: pd.Series,
