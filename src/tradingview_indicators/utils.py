@@ -222,8 +222,8 @@ def OHLC_finder(
     if not isinstance(dataframe, pd.DataFrame):
         raise ValueError("dataframe param must be a DataFrame")
 
-    ohlc_columns_lowercase = ['open', 'high', 'low', 'close']
-    ohlc_columns_uppercase = ['Open', 'High', 'Low', 'Close']
+    ohlc_columns_lowercase = ["open", "high", "low", "close"]
+    ohlc_columns_uppercase = ["Open", "High", "Low", "Close"]
     source_columns = [Open, High, Low, Close]
 
     is_na_source = all(
