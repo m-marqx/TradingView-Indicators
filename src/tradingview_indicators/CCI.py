@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from typing import Literal
+from .errors_exceptions import InvalidArgumentError
 from .moving_average import ema
 
 
@@ -116,13 +117,29 @@ class CCI:
         Parameters:
         -----------
         constant : float, optional
-            The constant factor for CCI calculation, by default 0.015.
+            The constant factor for CCI calculation.
+            (default: 0.015)
+        method : str, optional
+            The method to use for the moving average calculation.
+            (default: "sma")
 
         Returns:
         --------
         pd.DataFrame
             The calculated CCI data as a DataFrame.
+
+        Raises:
+        -------
+        InvalidArgumentError
+            If the method is not 'sma' or 'ema'.
         """
+        if method == "sma":
+            self.__set_sma()
+        elif method == "ema":
+            self.__set_ema()
+        else:
+            raise InvalidArgumentError("Method must be 'sma' or 'ema'.")
+
         self.window = np.lib.stride_tricks.sliding_window_view(self.source_arr, self.length)
         self.mean_window = np.mean(self.window, axis=1)
         self.abs_diff = np.abs(self.window - self.mean_window[:, np.newaxis])
