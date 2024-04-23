@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from typing import Literal
 from .moving_average import ema
 
 
@@ -22,7 +23,7 @@ class CCI:
     calculate_precice_CCI(smooth_column: str = "sma", constant: float = 0.015) -> CCI:
         Calculate CCI using a precise method.
 
-    CCI(constant: float = 0.015) -> pd.DataFrame:
+    calculate_CCI(constant: float = 0.015, method: str = "sma") -> pd.DataFrame:
         Calculate CCI using the specified method.
     """
 
@@ -108,7 +109,7 @@ class CCI:
 
         return self
 
-    def CCI(self, constant: float = 0.015) -> pd.DataFrame:
+    def calculate_CCI(self, constant: float = 0.015, method:Literal["ema", "sma"] = "sma") -> pd.DataFrame:
         """
         Calculate CCI using the specified method.
 
