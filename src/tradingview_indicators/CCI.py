@@ -19,7 +19,7 @@ class CCI:
 
     Methods:
     --------
-    CCI_precise(smooth_column: str = "sma", constant: float = 0.015) -> CCI:
+    calculate_precice_CCI(smooth_column: str = "sma", constant: float = 0.015) -> CCI:
         Calculate CCI using a precise method.
 
     set_sma() -> CCI:
@@ -47,7 +47,7 @@ class CCI:
         self.source = source
         self.length = length
 
-    def CCI_precise(
+    def calculate_precice_CCI(
         self,
         smooth_column: str = "sma",
         constant: float = 0.015,
