@@ -22,12 +22,6 @@ class CCI:
     calculate_precice_CCI(smooth_column: str = "sma", constant: float = 0.015) -> CCI:
         Calculate CCI using a precise method.
 
-    set_sma() -> CCI:
-        Set the Simple Moving Average (SMA) for the CCI calculation.
-
-    set_ema() -> CCI:
-        Set the Exponential Moving Average (EMA) for the CCI calculation.
-
     CCI(constant: float = 0.015) -> pd.DataFrame:
         Calculate CCI using the specified method.
     """
@@ -87,7 +81,7 @@ class CCI:
 
         return self.df["CCI"].dropna(axis=0, inplace=True)
 
-    def set_sma(self):
+    def __set_sma(self):
         """
         Set the Simple Moving Average (SMA) for the CCI calculation.
 
@@ -101,7 +95,7 @@ class CCI:
 
         return self
 
-    def set_ema(self):
+    def __set_ema(self):
         """
         Set the Exponential Moving Average (EMA) for the CCI calculation.
 
