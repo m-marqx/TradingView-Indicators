@@ -66,22 +66,22 @@ class CCI:
             The CCI object.
         """
 
-        self.df = pd.DataFrame()
-        self.df["TP"] = self.source_arr
-        self.df["sma"] = self.df["TP"].rolling(self.length).mean()
+        df = pd.DataFrame()
+        df["TP"] = self.source_arr
+        df["sma"] = df["TP"].rolling(self.length).mean()
 
-        self.df["mad"] = (
-            self.df["TP"]
+        df["mad"] = (
+            df["TP"]
             .rolling(self.length)
             .apply(lambda x: (pd.Series(x) - pd.Series(x).mean()).abs().mean())
         )
 
-        self.df["CCI"] = (
-            (self.df["TP"] - self.df[smooth_column])
-            / (constant * self.df["mad"])
+        df["CCI"] = (
+            (df["TP"] - df[smooth_column])
+            / (constant * df["mad"])
         )
 
-        return self.df["CCI"].dropna(axis=0, inplace=True)
+        return df["CCI"].dropna(axis=0, inplace=True)
 
     def __set_sma(self):
         """
@@ -146,13 +146,13 @@ class CCI:
 
         self.mad = np.mean(self.abs_diff, axis=1)
 
-        self.df = pd.DataFrame()
-        self.df["source"] = self.source[self.length - 1 :]
-        self.df["mad"] = self.mad
-        self.df["ma"] = self.ma
-        self.df["CCI"] = (
-            (self.df["source"] - self.df["ma"])
-            / (constant * self.df["mad"])
+        df = pd.DataFrame()
+        df["source"] = self.source[self.length - 1 :]
+        df["mad"] = self.mad
+        df["ma"] = self.ma
+        df["CCI"] = (
+            (df["source"] - df["ma"])
+            / (constant * df["mad"])
         )
 
-        return self.df
+        return df
