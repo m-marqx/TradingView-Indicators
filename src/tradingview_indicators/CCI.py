@@ -1,6 +1,7 @@
+from typing import Literal
+
 import pandas as pd
 import numpy as np
-from typing import Literal
 from .errors_exceptions import InvalidArgumentError
 from .moving_average import ema
 
