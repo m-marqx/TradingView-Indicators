@@ -49,13 +49,13 @@ def CCI(
                 mode="valid"
             )
         case "ema":
-            ma = ema(source, length).to_numpy()
+            ma = ema(source, length)
         case "dema":
-            ma = sema(source, length, 2).to_numpy()
+            ma = sema(source, length, 2)
         case "tema":
-            ma = sema(source, length, 3).to_numpy()
+            ma = sema(source, length, 3)
         case  "rma":
-            ma = rma(source, length).to_numpy()
+            ma = rma(source, length)
         case _:
             raise InvalidArgumentError(
             "Method must be 'sma', 'ema', 'sema', or 'rma'."
