@@ -1,11 +1,20 @@
 from typing import Literal
 import pandas as pd
-from .moving_average import sma, ema
+from .moving_average import sma, ema, sema, rma
+from .utils import DynamicTimeWarping
 
-
-class MACD:
+def MACD(
+    source: pd.Series,
+    fast_length: int,
+    slow_length: int,
+    signal_length: int,
+    diff_method: Literal["absolute", "ratio", "dtw"] = "absolute",
+    ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "ema",
+    signal_method: Literal["sma", "ema", "dema", "tema", "rma"] = "ema",
+) -> pd.DataFrame:
     """
-    Calculate the Moving Average Convergence Divergence (MACD) indicator.
+    Calculate the Moving Average Convergence Divergence (MACD)
+    indicator.
 
     Parameters:
     -----------
@@ -19,99 +28,78 @@ class MACD:
         The number of periods for the signal line moving average.
     method : Literal["ema", "sma"], optional
         The method to use for calculating moving averages, either
-        "ema" for Exponential Moving Average or "sma" for Simple
-        Moving Average.
+        "ema" for Exponential Moving Average or "sma" for Simple Moving
+        Average.
         (default: "ema")
 
     Raises:
     -------
     ValueError
         If an invalid method is provided.
-
-    Attributes:
-    -----------
-    source : pd.Series
-        The input time series data for calculating MACD.
-    fast_length : int
-        The number of periods for the fast moving average.
-    slow_length : int
-        The number of periods for the slow moving average.
-    signal_length : int
-        The number of periods for the signal line moving average.
-    fast_ma : pd.Series
-        The fast moving average values.
-    slow_ma : pd.Series
-        The slow moving average values.
-
-    Methods:
-    --------
-    get_histogram(self) -> pd.DataFrame:
-        Calculate the MACD histogram.
-
     """
-    def __init__(
-        self,
-        source: pd.Series,
-        fast_length: int,
-        slow_length: int,
-        signal_length: int,
-        method: Literal["ema", "sma"] = "ema",
-    ) -> None:
-        """
-        Initialize the Moving Average Convergence Divergence (MACD)
-        indicator.
+    if isinstance(source, pd.DataFrame):
+        raise TypeError("source can't be a DataFrame")
 
-        Parameters:
-        -----------
-        source : pd.Series
-            The input time series data for calculating MACD.
-        fast_length : int
-            The number of periods for the fast moving average.
-        slow_length : int
-            The number of periods for the slow moving average.
-        signal_length : int
-            The number of periods for the signal line moving average.
-        method : Literal["ema", "sma"], optional
-            The method to use for calculating moving averages, either
-            "ema" for Exponential Moving Average or "sma" for Simple
-            Moving Average.
-            (default: "ema")
+    match ma_method:
+        case "sma":
+            fast_ma = sma(source, fast_length)
+            slow_ma = sma(source, slow_length)
+        case "ema":
+            fast_ma = ema(source, fast_length)
+            slow_ma = ema(source, slow_length)
+        case "dema":
+            fast_ma = sema(source, fast_length, 2)
+            slow_ma = sema(source, slow_length, 2)
+        case "tema":
+            fast_ma = sema(source, fast_length, 3)
+            slow_ma = sema(source, slow_length, 3)
+        case "rma":
+            fast_ma = rma(source, fast_length)
+            slow_ma = rma(source, slow_length)
+        case _:
+            raise ValueError(f"'{ma_method}' is not a valid method.")
+    match diff_method:
+        case "absolute":
+            macd = (fast_ma - slow_ma).dropna()
+        case "ratio":
+            macd = (fast_ma / slow_ma).dropna()
+        case "dtw":
+            macd = (
+                DynamicTimeWarping(fast_ma, slow_ma)
+                .calculate_dtw_distance("absolute", True)
+            )
 
-        Raises:
-        -------
-        ValueError
-            If an invalid method is provided.
-        """
-        self.source = source
-        self.fast_length = fast_length
-        self.slow_length = slow_length
-        self.signal_length = signal_length
-        if method == "sma":
-            self.__set_sma()
-        if method == "ema":
-            self.__set_ema()
-        else:
-            raise ValueError(f"'{method}' is not a valid method.")
+    match signal_method:
+        case "sma":
+            macd_signal = sma(macd, signal_length)
+        case "ema":
+            macd_signal = ema(macd, signal_length)
+        case "dema":
+            macd_signal = sema(macd, signal_length, 2)
+        case "tema":
+            macd_signal = sema(macd, signal_length, 3)
+        case "rma":
+            macd_signal = rma(macd, signal_length)
+        case _:
+            raise ValueError(f"'{ma_method}' is not a valid method.")
 
-    def __set_ema(self) -> None:
-        self.fast_ma = ema(self.source, self.fast_length)
-        self.slow_ma = ema(self.source, self.slow_length)
+    match diff_method:
+        case "absolute":
+            histogram = macd - macd_signal
+        case "ratio":
+            histogram = macd / macd_signal
+        case "dtw":
+            histogram = (
+                DynamicTimeWarping(macd, macd_signal)
+                .calculate_dtw_distance("absolute", True)
+            )
 
-    def __set_sma(self) -> None:
-        self.fast_ma = sma(self.source, self.fast_length)
-        self.slow_ma = sma(self.source, self.slow_length)
+    macd_df = pd.concat(
+        [
+            macd.rename('macd'),
+            macd_signal.rename("signal"),
+            histogram.rename('histogram')
+        ], axis=1
+    )
 
-    @property
-    def get_histogram(self) -> pd.DataFrame:
-        """
-        Calculate the MACD histogram.
-
-        Returns:
-        --------
-        pd.DataFrame
-            A DataFrame containing the MACD histogram values.
-        """
-        macd = (self.fast_ma - self.slow_ma).dropna()
-        macd_signal = ema(macd, self.signal_length)
-        histogram = macd - macd_signal
-        return histogram
+    return macd_df
