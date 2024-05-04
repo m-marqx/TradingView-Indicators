@@ -3,6 +3,6 @@ from .CCI import CCI
 from .MACD import MACD
 from .RSI import RSI
 from .DMI import DMI
-from .stoch import SlowStochastic
+from .SMIO import SMIO
 from .ichimoku import Ichimoku
 from .didi_index import DidiIndex
