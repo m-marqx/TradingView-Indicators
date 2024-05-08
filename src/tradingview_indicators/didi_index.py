@@ -23,7 +23,7 @@ class DidiIndex:
     long_length : int
         The number of periods to include in the long moving average
         calculation.
-    method : Literal["sma", "ema", "sema", "rma"], optional
+    method : Literal["sma", "ema", "dema", "tema", "rma"], optional
         The method to use for the moving average calculation.
         (default: "ema")
 
@@ -46,7 +46,7 @@ class DidiIndex:
         short_length: int,
         mid_length: int,
         long_length: int,
-        method: Literal["sma", "ema", "sema", "rma"] = "ema",
+        method: Literal["sma", "ema", "dema", "tema", "rma"] = "ema",
     ) -> None:
         """
         Initialize the Didi Index.
@@ -74,23 +74,37 @@ class DidiIndex:
         self.long_length = long_length
         self.method = method
 
-        if method == "sma":
-            self.ma = sma
-        elif method == "ema":
-            self.ma = ema
-        elif method == "sema":
-            self.ma = sema
-        elif method == "rma":
-            self.ma = rma
-        else:
-            raise ValueError(
-                "Invalid method provided."
-                "Use 'sma', 'ema', 'sema', or 'rma'."
-            )
+        match method:
+            case "sma":
+                self.short_ma = sma(source, short_length)
+                self.mid_ma = sma(source, mid_length)
+                self.long_ma = sma(source, long_length)
 
-        self.short_ma = self.ma(source, short_length)
-        self.mid_ma = self.ma(source, mid_length)
-        self.long_ma = self.ma(source, long_length)
+            case "ema":
+                self.short_ma = ema(source, short_length)
+                self.mid_ma = ema(source, mid_length)
+                self.long_ma = ema(source, long_length)
+
+            case "dema":
+                self.short_ma = sema(source, short_length, 2)
+                self.mid_ma = sema(source, mid_length, 2)
+                self.long_ma = sema(source, long_length, 2)
+
+            case "tema":
+                self.short_ma = sema(source, short_length, 3)
+                self.mid_ma = sema(source, mid_length, 3)
+                self.long_ma = sema(source, long_length, 3)
+
+            case "rma":
+                self.short_ma = rma(source, short_length)
+                self.mid_ma = rma(source, mid_length)
+                self.long_ma = rma(source, long_length)
+
+            case _:
+                raise ValueError(
+                    "Invalid method provided."
+                    "Use 'sma', 'ema', 'dema', 'tema' or 'rma'."
+                )
 
     def absolute(self) -> pd.Series:
         """
