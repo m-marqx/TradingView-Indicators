@@ -48,7 +48,6 @@ def ema(source: pd.Series, length: int) -> pd.Series:
         .dropna(axis=0)
     )
 
-
 def sema(source: pd.Series, length: int, smooth: int) -> pd.Series:
     """
     Calculate the Smoothed Exponential Moving Average (SEMA)
@@ -84,7 +83,6 @@ def sema(source: pd.Series, length: int, smooth: int) -> pd.Series:
     )
     sema_series = emas_df["sema"]
     return sema_series.dropna(axis=0)
-
 
 def _rma_pandas(
     source: pd.Series,
