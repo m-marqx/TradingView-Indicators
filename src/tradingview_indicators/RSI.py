@@ -1,9 +1,16 @@
+from typing import Literal
+
 import numpy as np
 import pandas as pd
-from .moving_average import rma
+
+from .moving_average import sma, ema, sema, rma
 
 
-def RSI(source: pd.Series, periods: int = 14) -> pd.Series:
+def RSI(
+    source: pd.Series,
+    periods: int = 14,
+    ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "rma",
+) -> pd.Series:
     """
     Calculate the Relative Strength Index (RSI) for a given time series
     data.
@@ -27,7 +34,17 @@ def RSI(source: pd.Series, periods: int = 14) -> pd.Series:
         pd.Series(np.maximum(source.shift(1) - source, 0.0)).dropna()
     )
 
-    relative_strength = rma(upward_diff, periods) / rma(downward_diff, periods)
+    match ma_method:
+        case "sma":
+            relative_strength = sma(upward_diff, periods) / sma(downward_diff, periods)
+        case "ema":
+            relative_strength = ema(upward_diff, periods) / ema(downward_diff, periods)
+        case "dema":
+            relative_strength = sema(upward_diff, periods, 2) / sema(downward_diff, periods, 2)
+        case "tema":
+            relative_strength = sema(upward_diff, periods, 3) / sema(downward_diff, periods, 3)
+        case "rma":
+            relative_strength = rma(upward_diff, periods) / rma(downward_diff, periods)
 
     rsi = 100 - (100 / (1 + relative_strength))
     return rsi.rename("RSI")
