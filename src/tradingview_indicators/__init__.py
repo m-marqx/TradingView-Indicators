@@ -10,4 +10,4 @@ from .stoch import stoch
 from .ichimoku import Ichimoku
 from .didi_index import didi_index
 from .tsi import tsi
-from .bollinger import bollinger_bands
+from .bollinger import bollinger_bands, bollinger_trends

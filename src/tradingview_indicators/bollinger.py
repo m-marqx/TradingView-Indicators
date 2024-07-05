@@ -1,10 +1,13 @@
 from typing import Literal
 import pandas as pd
+import numpy as np
+
 from .moving_average import sma, ema, sema, rma
 from .utils import DynamicTimeWarping
 
+
 def bollinger_bands(
-    source:pd.Series,
+    source: pd.Series,
     length: int,
     mult: float,
     ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "ema",
@@ -27,9 +30,96 @@ def bollinger_bands(
 
     deviation = mult * source.rolling(window=length).std()
 
-    return pd.DataFrame({
-        "basis": basis,
-        "upper": basis + deviation,
-        "lower": basis - deviation
-    })
+    return pd.DataFrame(
+        {
+            "basis": basis,
+            "upper": basis + deviation,
+            "lower": basis - deviation,
+        }
+    )
 
+
+def bollinger_trends(
+    source: pd.Series,
+    short_length: int = 20,
+    long_length: int = 50,
+    mult: float = 2,
+    ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "sma",
+    stdev_method: Literal["absolute", "ratio", "dtw"] = "absolute",
+    diff_method: Literal["absolute", "ratio", "dtw"] = "ratio",
+    based_on: Literal["short_length", "long_length"] = "short_length",
+) -> pd.Series:
+    short_bands = bollinger_bands(source, short_length, mult, ma_method)
+    long_bands = bollinger_bands(source, long_length, mult, ma_method)
+
+    short_lower = short_bands["lower"]
+    short_upper = short_bands["upper"]
+
+    long_lower = long_bands["lower"]
+    long_upper = long_bands["upper"]
+
+    match based_on:
+        case "short_length":
+            middle = short_bands["basis"]
+
+        case "long_length":
+            middle = long_bands["basis"]
+
+    short_length_index = short_length - 1
+
+    match stdev_method:
+        case "absolute":
+            lower_diff = abs(short_lower - long_lower)
+            upper_diff = abs(short_upper - long_upper)
+
+        case "ratio":
+            lower_diff = abs(short_lower / long_lower)
+            upper_diff = abs(short_upper / long_upper)
+
+        case "dtw":
+            short_lower = short_lower.iloc[short_length_index:]
+            short_upper = short_upper.iloc[short_length_index:]
+
+            long_lower = long_lower.iloc[short_length_index:]
+            long_upper = long_upper.iloc[short_length_index:]
+
+            lower_diff = (
+                DynamicTimeWarping(short_lower, long_lower)
+                .calculate_dtw_distance("absolute", True)
+            )
+
+            upper_diff = (
+                DynamicTimeWarping(short_upper, long_upper)
+                .calculate_dtw_distance("absolute", True)
+            )
+
+    match diff_method:
+        case "absolute":
+            return (
+                (lower_diff - upper_diff) - middle * 100
+            ).rename("Bollinger Trend")
+
+        case "ratio":
+            return (
+                (lower_diff / upper_diff) / middle * 100
+            ).rename("Bollinger Trend")
+
+        case "dtw":
+            middle = middle.iloc[short_length_index:]
+            distance_diff = (
+                DynamicTimeWarping(lower_diff, upper_diff)
+                .calculate_dtw_distance("ratio", True)
+            )
+            null_series = pd.Series(
+                np.full(short_length_index, np.nan),
+                index=range(0, short_length_index),
+            )
+
+            return pd.concat(
+                [
+                    null_series, (
+                        DynamicTimeWarping(distance_diff, middle)
+                        .calculate_dtw_distance("ratio", True)  * 100
+                    )
+                ]
+            ).rename("Bollinger Trend")
