@@ -83,14 +83,14 @@ def bollinger_trends(
             long_lower = long_lower.iloc[short_length_index:]
             long_upper = long_upper.iloc[short_length_index:]
 
-            lower_diff = (
+            lower_diff = abs(
                 DynamicTimeWarping(short_lower, long_lower)
-                .calculate_dtw_distance("absolute", True)
+                .calculate_dtw_distance("ratio", True)
             )
 
-            upper_diff = (
+            upper_diff = abs(
                 DynamicTimeWarping(short_upper, long_upper)
-                .calculate_dtw_distance("absolute", True)
+                .calculate_dtw_distance("ratio", True)
             )
 
     match diff_method:
@@ -111,10 +111,12 @@ def bollinger_trends(
 
         case "dtw":
             middle = middle.iloc[short_length_index:]
+
             distance_diff = (
                 DynamicTimeWarping(lower_diff, upper_diff)
                 .calculate_dtw_distance("ratio", True)
-            )
+            ) * 100
+
             null_series = pd.Series(
                 np.full(short_length_index, np.nan),
                 index=range(0, short_length_index),
