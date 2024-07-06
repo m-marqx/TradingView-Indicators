@@ -46,7 +46,7 @@ def bollinger_trends(
     mult: float = 2,
     ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "sma",
     stdev_method: Literal["absolute", "ratio", "dtw"] = "absolute",
-    diff_method: Literal["absolute", "ratio", "dtw"] = "ratio",
+    diff_method: Literal["normal", "absolute", "ratio", "dtw"] = "normal",
     based_on: Literal["short_length", "long_length"] = "short_length",
 ) -> pd.Series:
     short_bands = bollinger_bands(source, short_length, mult, ma_method)
@@ -94,6 +94,11 @@ def bollinger_trends(
             )
 
     match diff_method:
+        case "normal":
+            return (
+                (lower_diff - upper_diff) / middle * 100
+            ).rename("Bollinger Trend")
+
         case "absolute":
             return (
                 (lower_diff - upper_diff) - middle * 100

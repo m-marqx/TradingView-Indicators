@@ -11,6 +11,33 @@ class TestBollingerBands(unittest.TestCase):
         self.short_length = 10
         self.stdev = 2
 
+
+    def test_bollinger_trends_normal(self):
+        ref_values = [
+            -73.09644670050763,
+            -75.62002807674314,
+            -84.45907635754708,
+            87.6712328767123,
+            131.4508264920836,
+            -64.63473633284956,
+            5.320945945945931,
+            -7.547169811320736,
+            24.2933537051184,
+            -1.7156094986853856
+        ]
+
+        ref_df = pd.Series(ref_values, index=range(9, 19), name='Bollinger Trend')
+
+        test_values = bollinger_trends(
+            self.source,
+            self.short_length,
+            self.stdev,
+            stdev_method='absolute',
+            diff_method='normal',
+        ).iloc[9:19]
+
+        pd.testing.assert_series_equal(ref_df, test_values)
+
     def test_bollinger_trends_absolute(self):
         ref_values = [
             -17859.6,
