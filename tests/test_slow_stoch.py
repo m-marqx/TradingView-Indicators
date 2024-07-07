@@ -187,6 +187,8 @@ class TestSlowStoch(unittest.TestCase):
             self.short_source['high'],
             self.short_source['low'],
             self.k_length,
+            self.k_smoothing,
+            self.d_smoothing,
             smoothing_method='tema',
         )
 
