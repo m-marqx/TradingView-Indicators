@@ -93,7 +93,6 @@ class TestSlowStoch(unittest.TestCase):
     def test_slow_stoch_ema(self):
         indexes = pd.Index(
             [
-                '2017-08-30',
                 '2017-08-31',
                 '2017-09-01',
                 '2017-09-02',
