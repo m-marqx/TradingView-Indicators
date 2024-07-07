@@ -17,17 +17,22 @@ class TestCCI(unittest.TestCase):
                 [107, 118.56, 253.2, -82.20872695],
                 [72, 126, 247, -92.59259259],
                 [189, 89.92, 197.6, -6.37603796],
-                [21, 78.4, 132, -94.3877551 ],
+                [21, 78.4, 132, -94.3877551],
                 [103, 41.52, 98.4, 7.38599872],
                 [122, 43.92, 101.4, 31.26897389],
             ]
         )
         columns = ["source", "mad", "ma", "CCI"]
-        indexes = [4,5,6,7,8,9]
-        ref_df = pd.DataFrame(np_values, columns=columns, index=indexes).astype('float64')
-        test_df = CCI(self.source, self.length, method='sma').astype('float64')
+        indexes = [4, 5, 6, 7, 8, 9]
 
-        pd.testing.assert_frame_equal(ref_df,test_df)
+        ref_df = (
+            pd.DataFrame(np_values, columns=columns, index=indexes)
+            .astype("float64")
+        )
+
+        test_df = CCI(self.source, self.length, method="sma").astype("float64")
+
+        pd.testing.assert_frame_equal(ref_df, test_df)
 
     def test_CCI_ema(self):
         np_values = np.array(
@@ -37,15 +42,20 @@ class TestCCI(unittest.TestCase):
                 [189.0, 89.92, 191.53333333333336, -1.8782127323052786],
                 [21.0, 78.4, 134.68888888888893, -96.67422524565386],
                 [103.0, 41.519999999999996, 124.12592592592596, -33.92088298960494],
-                [122.0, 43.92, 123.4172839506173, -2.15131140045128]
+                [122.0, 43.92, 123.4172839506173, -2.15131140045128],
             ]
         )
         columns = ["source", "mad", "ma", "CCI"]
-        indexes = [4,5,6,7,8,9]
-        ref_df = pd.DataFrame(np_values, columns=columns, index=indexes).astype('float64')
-        test_df = CCI(self.source, self.length, method='ema').astype('float64')
+        indexes = [4, 5, 6, 7, 8, 9]
 
-        pd.testing.assert_frame_equal(ref_df,test_df)
+        ref_df = (
+            pd.DataFrame(np_values, columns=columns, index=indexes)
+            .astype("float64")
+        )
+
+        test_df = CCI(self.source, self.length, method="ema").astype("float64")
+
+        pd.testing.assert_frame_equal(ref_df, test_df)
 
     def test_CCI_dema(self):
         np.random.seed(42)
@@ -69,16 +79,20 @@ class TestCCI(unittest.TestCase):
                 [100.0, 140.95999999999998, 253.19559883411335, -72.45346142362531],
                 [360.0, 145.6, 259.1779440427066, 46.16394503539076],
                 [152.0, 121.52000000000001, 249.9281036862251, -53.72399807232012],
-                [131.0, 114.64000000000001, 232.602829784875, -59.085153398973596]
+                [131.0, 114.64000000000001, 232.602829784875, -59.085153398973596],
             ]
         )
 
         columns = ["source", "mad", "ma", "CCI"]
-        indexes = list(range(4,20))
+        indexes = list(range(4, 20))
 
-        ref_df = pd.DataFrame(np_values, columns=columns, index=indexes).astype('float64')
-        test_df = CCI(source, length, method='dema').astype('float64')
-        pd.testing.assert_frame_equal(ref_df,test_df)
+        ref_df = (
+            pd.DataFrame(np_values, columns=columns, index=indexes)
+            .astype("float64")
+        )
+
+        test_df = CCI(source, length, method="dema").astype("float64")
+        pd.testing.assert_frame_equal(ref_df, test_df)
 
     def test_CCI_tema(self):
         np.random.seed(42)
@@ -108,11 +122,15 @@ class TestCCI(unittest.TestCase):
         )
 
         columns = ["source", "mad", "ma", "CCI"]
-        indexes = list(range(4,20))
+        indexes = list(range(4, 20))
 
-        ref_df = pd.DataFrame(np_values, columns=columns, index=indexes).astype('float64')
-        test_df = CCI(source, length, method='tema').astype('float64')
-        pd.testing.assert_frame_equal(ref_df,test_df)
+        ref_df = (
+            pd.DataFrame(np_values, columns=columns, index=indexes)
+            .astype("float64")
+        )
+
+        test_df = CCI(source, length, method="tema").astype("float64")
+        pd.testing.assert_frame_equal(ref_df, test_df)
 
     def test_CCI_rma(self):
         np_values = np.array(
@@ -122,13 +140,17 @@ class TestCCI(unittest.TestCase):
                 [189.0, 89.92, 211.36800000000002, -16.583629893238452],
                 [21.0, 78.4, 173.29440000000002, -129.50204081632657],
                 [103.0, 41.519999999999996, 159.23552, -90.29466923570972],
-                [122.0, 43.92, 151.788416, -45.21617486338799]
+                [122.0, 43.92, 151.788416, -45.21617486338799],
             ]
         )
 
         columns = ["source", "mad", "ma", "CCI"]
-        indexes = [4,5,6,7,8,9]
-        ref_df = pd.DataFrame(np_values, columns=columns, index=indexes).astype('float64')
-        test_df = CCI(self.source, self.length, method='rma').astype('float64')
+        indexes = [4, 5, 6, 7, 8, 9]
+        ref_df = (
+            pd.DataFrame(np_values, columns=columns, index=indexes)
+            .astype("float64")
+        )
 
-        pd.testing.assert_frame_equal(ref_df,test_df)
+        test_df = CCI(self.source, self.length, method="rma").astype("float64")
+
+        pd.testing.assert_frame_equal(ref_df, test_df)

@@ -22,7 +22,7 @@ class TestBollingerBands(unittest.TestCase):
             236.8,
             227.9,
             261.8,
-            266.7
+            266.7,
         ]
 
         ref_upper = [
@@ -35,7 +35,7 @@ class TestBollingerBands(unittest.TestCase):
             558.1455046104322,
             559.8831990394159,
             568.1256074470068,
-            563.1441862401007
+            563.1441862401007,
         ]
 
         ref_lower = [
@@ -48,13 +48,13 @@ class TestBollingerBands(unittest.TestCase):
             -84.5455046104322,
             -104.08319903941592,
             -44.52560744700685,
-            -29.74418624010076
+            -29.74418624010076,
         ]
 
         ref_values = {
             "basis": ref_basis,
             "upper": ref_upper,
-            "lower": ref_lower
+            "lower": ref_lower,
         }
 
         ref_df = pd.DataFrame(ref_values, index=range(9, 19))
@@ -63,7 +63,7 @@ class TestBollingerBands(unittest.TestCase):
             self.source,
             self.short_length,
             self.stdev,
-            ma_method='sma',
+            ma_method="sma",
         ).iloc[9:19]
 
         pd.testing.assert_frame_equal(ref_df, test_df)
@@ -79,7 +79,7 @@ class TestBollingerBands(unittest.TestCase):
             271.5740701562068,
             240.3787846732601,
             262.12809655084914,
-            242.10480626887653
+            242.10480626887653,
         ]
 
         ref_upper = [
@@ -92,7 +92,7 @@ class TestBollingerBands(unittest.TestCase):
             592.919574766639,
             572.361983712676,
             568.453703997856,
-            538.5489925089773
+            538.5489925089773,
         ]
 
         ref_lower = [
@@ -105,13 +105,13 @@ class TestBollingerBands(unittest.TestCase):
             -49.771434454225414,
             -91.60441436615582,
             -44.19751089615772,
-            -54.33937997122422
+            -54.33937997122422,
         ]
 
         ref_values = {
             "basis": ref_basis,
             "upper": ref_upper,
-            "lower": ref_lower
+            "lower": ref_lower,
         }
 
         ref_df = pd.DataFrame(ref_values, index=range(9, 19))
@@ -120,7 +120,7 @@ class TestBollingerBands(unittest.TestCase):
             self.source,
             self.short_length,
             self.stdev,
-            ma_method='ema',
+            ma_method="ema",
         ).iloc[9:19]
 
         pd.testing.assert_frame_equal(ref_df, test_df)
@@ -136,7 +136,7 @@ class TestBollingerBands(unittest.TestCase):
             247.16462267513234,
             260.0016584489313,
             269.71895815043536,
-            280.06792875556005
+            280.06792875556005,
         ]
 
         ref_upper = [
@@ -149,7 +149,7 @@ class TestBollingerBands(unittest.TestCase):
             506.72228058138205,
             528.1608151699602,
             509.4599294785196,
-            523.6960606834363
+            523.6960606834363,
         ]
 
         ref_lower = [
@@ -162,7 +162,7 @@ class TestBollingerBands(unittest.TestCase):
             -12.393035231117409,
             -8.157498272097541,
             29.977986822351113,
-            36.439796827683836
+            36.439796827683836,
         ]
 
         ref_values = {
@@ -177,7 +177,7 @@ class TestBollingerBands(unittest.TestCase):
             self.source,
             self.short_length,
             self.stdev,
-            ma_method='dema',
+            ma_method="dema",
         ).iloc[18:28]
 
         pd.testing.assert_frame_equal(ref_df, test_df)
@@ -193,7 +193,7 @@ class TestBollingerBands(unittest.TestCase):
             191.18167685702826,
             203.68236654130544,
             206.2695317937874,
-            258.88733060418315
+            258.88733060418315,
         ]
 
         ref_upper = [
@@ -206,7 +206,7 @@ class TestBollingerBands(unittest.TestCase):
             470.5686247745476,
             471.255907834162,
             475.03502230343014,
-            521.2682242175202
+            521.2682242175202,
         ]
 
         ref_lower = [
@@ -219,7 +219,7 @@ class TestBollingerBands(unittest.TestCase):
             -88.20527106049104,
             -63.89117475155109,
             -62.49595871585535,
-            -3.493563009153945
+            -3.493563009153945,
         ]
 
         ref_values = {
@@ -234,7 +234,7 @@ class TestBollingerBands(unittest.TestCase):
             self.source,
             self.short_length,
             self.stdev,
-            ma_method='tema',
+            ma_method="tema",
         ).iloc[28:38]
 
         pd.testing.assert_frame_equal(ref_df, test_df)
@@ -250,7 +250,7 @@ class TestBollingerBands(unittest.TestCase):
             242.43542230000006,
             228.19188007000005,
             241.37269206300004,
-            232.43542285670003
+            232.43542285670003,
         ]
 
         ref_upper = [
@@ -263,7 +263,7 @@ class TestBollingerBands(unittest.TestCase):
             563.7809269104323,
             560.175079109416,
             547.6982995100069,
-            528.8796090968008
+            528.8796090968008,
         ]
 
         ref_lower = [
@@ -276,7 +276,7 @@ class TestBollingerBands(unittest.TestCase):
             -78.91008231043216,
             -103.79131896941587,
             -64.95291538400681,
-            -64.00876338340072
+            -64.00876338340072,
         ]
 
         ref_values = {
@@ -291,7 +291,7 @@ class TestBollingerBands(unittest.TestCase):
             self.source,
             self.short_length,
             self.stdev,
-            ma_method='rma',
+            ma_method="rma",
         ).iloc[9:19]
 
         pd.testing.assert_frame_equal(ref_df, test_df)

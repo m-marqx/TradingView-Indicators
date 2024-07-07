@@ -14,7 +14,7 @@ class TestMACD(unittest.TestCase):
         self.slow_length = 5
         self.signal_length = 2
         self.diff_method = "absolute"
-        self.indexes = range(4,10)
+        self.indexes = range(4, 10)
         self.columns = ["macd", "signal", "histogram"]
 
     def test_MACD_ma_sma(self):
@@ -30,17 +30,15 @@ class TestMACD(unittest.TestCase):
         ref_df = pd.DataFrame(
             ref_values,
             index=self.indexes,
-            columns=self.columns
+            columns=self.columns,
         )
 
-        macd_df = (
-            MACD(
-                self.source_10,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="sma",
-            )
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="sma",
         )
 
         pd.testing.assert_frame_equal(ref_df, macd_df)
@@ -58,45 +56,15 @@ class TestMACD(unittest.TestCase):
         ref_df = pd.DataFrame(
             ref_values,
             index=self.indexes,
-            columns=self.columns
+            columns=self.columns,
         )
 
-        macd_df = (
-            MACD(
-                self.source_10,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="ema",
-            )
-        )
-
-        pd.testing.assert_frame_equal(ref_df, macd_df)
-
-    def test_MACD_ma_rma(self):
-        ref_values = [
-            [-25.75555555555553, np.nan, np.nan],
-            [-41.33037037037036, -33.542962962962946, -7.787407407407414],
-            [-31.28158024691359, -32.035374485596705, 0.7537942386831133],
-            [-46.23678683127572, -41.50298271604938, -4.7338041152263415],
-            [-40.19711122085047, -40.63240171925011, 0.4352904983996382],
-            [-31.762810147233637, -34.71934067123913, 2.956530524005494],
-        ]
-
-        ref_df = pd.DataFrame(
-            ref_values,
-            index=self.indexes,
-            columns=self.columns
-        )
-
-        macd_df = (
-            MACD(
-                self.source_10,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="rma",
-            )
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="ema",
         )
 
         pd.testing.assert_frame_equal(ref_df, macd_df)
@@ -114,17 +82,41 @@ class TestMACD(unittest.TestCase):
         ref_df = pd.DataFrame(
             ref_values,
             index=self.indexes,
-            columns=self.columns
+            columns=self.columns,
         )
 
-        macd_df = (
-            MACD(
-                self.source_10,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="rma",
-            )
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="rma",
+        )
+
+        pd.testing.assert_frame_equal(ref_df, macd_df)
+
+    def test_MACD_ma_rma(self):
+        ref_values = [
+            [-25.75555555555553, np.nan, np.nan],
+            [-41.33037037037036, -33.542962962962946, -7.787407407407414],
+            [-31.28158024691359, -32.035374485596705, 0.7537942386831133],
+            [-46.23678683127572, -41.50298271604938, -4.7338041152263415],
+            [-40.19711122085047, -40.63240171925011, 0.4352904983996382],
+            [-31.762810147233637, -34.71934067123913, 2.956530524005494],
+        ]
+
+        ref_df = pd.DataFrame(
+            ref_values,
+            index=self.indexes,
+            columns=self.columns,
+        )
+
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="rma",
         )
 
         pd.testing.assert_frame_equal(ref_df, macd_df)
@@ -151,14 +143,12 @@ class TestMACD(unittest.TestCase):
             columns=self.columns,
         )
 
-        macd_df = (
-            MACD(
-                self.source_20,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="dema",
-            )
+        macd_df = MACD(
+            self.source_20,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="dema",
         )
 
         macd_df.columns = self.columns
@@ -181,23 +171,21 @@ class TestMACD(unittest.TestCase):
             [-43.379868203303545, -29.625728895640815, -13.75413930766273],
             [-11.782574841064957, -17.730292859256913, 5.9477180181919564],
             [-37.18720195785079, -30.70156559165283, -6.485636366197959],
-            [28.805414513595736, 8.969754478512879, 19.835660035082856]
+            [28.805414513595736, 8.969754478512879, 19.835660035082856],
         ]
 
         ref_df = pd.DataFrame(
             ref_values,
-            index=range(12,20),
-            columns=self.columns
+            index=range(12, 20),
+            columns=self.columns,
         )
 
-        macd_df = (
-            MACD(
-                self.source_20,
-                self.fast_length,
-                self.slow_length,
-                self.signal_length,
-                ma_method="tema",
-            )
+        macd_df = MACD(
+            self.source_20,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            ma_method="tema",
         )
         macd_df.columns = self.columns
 

@@ -26,7 +26,9 @@ class TestTrix(unittest.TestCase):
                 -68.84957653841006,
                 -77.75747400020627,
                 -85.15236395226111,
-            ], index=range(51, 60), name="TRIX"
+            ],
+            index=range(51, 60),
+            name="TRIX",
         )
 
         result = TRIX(self.source, self.length, self.signal_length, "sma")
@@ -45,7 +47,9 @@ class TestTrix(unittest.TestCase):
                 -0.0018611586405370417,
                 0.3318962104348344,
                 -26.418522373559128,
-            ], index=range(51, 60), name="TRIX"
+            ],
+            index=range(51, 60),
+            name="TRIX",
         )
 
         result = TRIX(self.source, self.length, self.signal_length, "ema")
@@ -65,7 +69,9 @@ class TestTrix(unittest.TestCase):
                 -37.48562142520839,
                 -37.67782830019328,
                 -37.82084645590267,
-            ], index=range(102, 112), name="TRIX"
+            ],
+            index=range(102, 112),
+            name="TRIX",
         )
 
         result = TRIX(self.dema_source, self.length, self.signal_length, "dema")
@@ -84,8 +90,10 @@ class TestTrix(unittest.TestCase):
                 157.91091562776137,
                 -21.10271369721417,
                 -99.46466831257439,
-                -10.863910790561704
-            ], index=range(153, 163), name="TRIX"
+                -10.863910790561704,
+            ],
+            index=range(153, 163),
+            name="TRIX",
         )
 
         result = TRIX(self.tema_source, self.length, self.signal_length, "tema")
@@ -104,9 +112,10 @@ class TestTrix(unittest.TestCase):
                 8.860861098760608,
                 8.951996463011369,
                 5.044486316796437,
-            ], index=range(51, 60), name="TRIX"
+            ],
+            index=range(51, 60),
+            name="TRIX",
         )
-
 
         result = TRIX(self.source, self.length, self.signal_length, "rma")
 

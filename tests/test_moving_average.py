@@ -19,14 +19,16 @@ class TestMovingAverage(unittest.TestCase):
         pd.testing.assert_series_equal(result, expected_result)
 
     def test_ema(self):
-        expected_result = pd.Series([
-            253.2,
-            192.8,
-            191.53333333333336,
-            134.68888888888893,
-            124.12592592592596,
-            123.4172839506173,
-        ])
+        expected_result = pd.Series(
+            [
+                253.2,
+                192.8,
+                191.53333333333336,
+                134.68888888888893,
+                124.12592592592596,
+                123.4172839506173,
+            ]
+        )
 
         result = ema(self.source, self.length).reset_index(drop=True)
 

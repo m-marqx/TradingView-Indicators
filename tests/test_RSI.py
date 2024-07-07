@@ -17,18 +17,19 @@ class TestRSI(unittest.TestCase):
     def test_rsi_sma(self):
         indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
         ref_values = [
             67.85827398305986,
@@ -41,30 +42,31 @@ class TestRSI(unittest.TestCase):
             58.90351209891528,
             50.04269442072532,
             48.39529957265133,
-            46.47902783222265
+            46.47902783222265,
         ]
 
         ref_df = pd.Series(ref_values, index=indexes, name="RSI")
 
-        test_rsi = RSI(self.short_source['close'], self.length, "sma")
+        test_rsi = RSI(self.short_source["close"], self.length, "sma")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)
 
     def test_rsi_ema(self):
         indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
         ref_values = [
             67.85827398305986,
@@ -82,27 +84,28 @@ class TestRSI(unittest.TestCase):
 
         ref_df = pd.Series(ref_values, index=indexes, name="RSI")
 
-        test_rsi = RSI(self.short_source['close'], self.length, "ema")
+        test_rsi = RSI(self.short_source["close"], self.length, "ema")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)
 
     def test_rsi_dema(self):
         indexes = pd.Index(
             [
-                '2017-09-13',
-                '2017-09-14',
-                '2017-09-15',
-                '2017-09-16',
-                '2017-09-17',
-                '2017-09-18',
-                '2017-09-19',
-                '2017-09-20',
-                '2017-09-21',
-                '2017-09-22',
-                '2017-09-23',
-                '2017-09-24',
-                '2017-09-25'
-            ], name='open_time',
+                "2017-09-13",
+                "2017-09-14",
+                "2017-09-15",
+                "2017-09-16",
+                "2017-09-17",
+                "2017-09-18",
+                "2017-09-19",
+                "2017-09-20",
+                "2017-09-21",
+                "2017-09-22",
+                "2017-09-23",
+                "2017-09-24",
+                "2017-09-25",
+            ],
+            name="open_time",
         )
         ref_values = [
             45.473351418710536,
@@ -117,29 +120,30 @@ class TestRSI(unittest.TestCase):
             41.540849537417294,
             42.09679826319482,
             42.04121490078051,
-            43.452858299751824
+            43.452858299751824,
         ]
 
         ref_df = pd.Series(ref_values, index=indexes, name="RSI")
 
-        test_rsi = RSI(self.medium_source['close'], self.length, "dema")
+        test_rsi = RSI(self.medium_source["close"], self.length, "dema")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)
 
     def test_rsi_tema(self):
         indexes = pd.Index(
             [
-                '2017-09-26',
-                '2017-09-27',
-                '2017-09-28',
-                '2017-09-29',
-                '2017-09-30',
-                '2017-10-01',
-                '2017-10-02',
-                '2017-10-03',
-                '2017-10-04',
-                '2017-10-05',
-            ], name='open_time',
+                "2017-09-26",
+                "2017-09-27",
+                "2017-09-28",
+                "2017-09-29",
+                "2017-09-30",
+                "2017-10-01",
+                "2017-10-02",
+                "2017-10-03",
+                "2017-10-04",
+                "2017-10-05",
+            ],
+            name="open_time",
         )
         ref_values = [
             68.13395822544877,
@@ -156,25 +160,26 @@ class TestRSI(unittest.TestCase):
 
         ref_df = pd.Series(ref_values, index=indexes, name="RSI")
 
-        test_rsi = RSI(self.long_source['close'], self.length, "tema")
+        test_rsi = RSI(self.long_source["close"], self.length, "tema")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)
 
     def test_rsi_rma(self):
         indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
         ref_values = [
             67.85827398305986,
@@ -192,6 +197,6 @@ class TestRSI(unittest.TestCase):
 
         ref_df = pd.Series(ref_values, index=indexes, name="RSI")
 
-        test_rsi = RSI(self.short_source['close'], self.length, 'rma')
+        test_rsi = RSI(self.short_source["close"], self.length, "rma")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)

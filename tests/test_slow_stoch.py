@@ -3,10 +3,14 @@ import pandas as pd
 import numpy as np
 from src.tradingview_indicators.slow_stoch import slow_stoch
 
+
 class TestSlowStoch(unittest.TestCase):
     def setUp(self):
         np.random.seed(42)
-        source = pd.read_csv("example/BTCUSDT_1d_spot.csv", index_col=0).iloc[:-1]
+        source = (
+            pd.read_csv("example/BTCUSDT_1d_spot.csv", index_col=0)
+            .iloc[:-1]
+        )
         self.short_source = source.iloc[:25]
         self.medium_source = source.iloc[:83]
         self.long_source = source.iloc[:119]
@@ -18,34 +22,35 @@ class TestSlowStoch(unittest.TestCase):
     def test_slow_stoch_sma(self):
         ref_k_indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
 
         ref_d_indexes = pd.Index(
             [
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
-
 
         ref_k_values = pd.Series(
             [
@@ -59,8 +64,10 @@ class TestSlowStoch(unittest.TestCase):
                 78.7829575135273,
                 66.17359806614331,
                 49.97829649974933,
-                44.274392114893864
-            ], index = ref_k_indexes, name = '%K'
+                44.274392114893864,
+            ],
+            index=ref_k_indexes,
+            name="%K",
         )
 
         ref_d_values = pd.Series(
@@ -73,18 +80,20 @@ class TestSlowStoch(unittest.TestCase):
                 65.57031817453887,
                 70.52427673709082,
                 64.9782840264733,
-                53.475428893595506
-            ], index = ref_d_indexes, name = '%D'
+                53.475428893595506,
+            ],
+            index=ref_d_indexes,
+            name="%D",
         )
 
         test_k, test_d = slow_stoch(
-            self.short_source['close'],
-            self.short_source['high'],
-            self.short_source['low'],
+            self.short_source["close"],
+            self.short_source["high"],
+            self.short_source["low"],
             self.k_length,
             self.k_smoothing,
             self.d_smoothing,
-            smoothing_method='sma',
+            smoothing_method="sma",
         )
 
         pd.testing.assert_series_equal(test_k, ref_k_values)
@@ -93,18 +102,19 @@ class TestSlowStoch(unittest.TestCase):
     def test_slow_stoch_ema(self):
         indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
         ref_values = [
             [95.53486648926238, np.nan],
@@ -117,19 +127,19 @@ class TestSlowStoch(unittest.TestCase):
             [77.49577246232057, 71.765639657521],
             [59.74925627004848, 65.75744796378474],
             [52.63681530707365, 59.197131635429194],
-            [43.85773137182555, 51.52743150362737]
+            [43.85773137182555, 51.52743150362737],
         ]
 
-        ref_df = pd.DataFrame(ref_values, index=indexes, columns=['%K', '%D'])
+        ref_df = pd.DataFrame(ref_values, index=indexes, columns=["%K", "%D"])
 
         test_k, test_d = slow_stoch(
-            self.short_source['close'],
-            self.short_source['high'],
-            self.short_source['low'],
+            self.short_source["close"],
+            self.short_source["high"],
+            self.short_source["low"],
             self.k_length,
             self.k_smoothing,
             self.d_smoothing,
-            smoothing_method='ema',
+            smoothing_method="ema",
         )
 
         test_df = pd.concat([test_k, test_d], axis=1)
@@ -139,17 +149,18 @@ class TestSlowStoch(unittest.TestCase):
     def test_slow_stoch_dema(self):
         indexes = pd.Index(
             [
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
 
         ref_values = [
@@ -162,50 +173,51 @@ class TestSlowStoch(unittest.TestCase):
             [73.61664759181798, 70.33765624371793],
             [64.37172004397164, 68.72779008326889],
             [56.54845021937298, 65.28048857718265],
-            [48.087970987674694, 60.120533803284104]
+            [48.087970987674694, 60.120533803284104],
         ]
-        
-        ref_df = pd.DataFrame(ref_values, index=indexes, columns=['%K', '%D'])
-        
+
+        ref_df = pd.DataFrame(ref_values, index=indexes, columns=["%K", "%D"])
+
         test_k, test_d = slow_stoch(
-            self.short_source['close'],
-            self.short_source['high'],
-            self.short_source['low'],
+            self.short_source["close"],
+            self.short_source["high"],
+            self.short_source["low"],
             self.k_length,
             self.k_smoothing,
             self.d_smoothing,
-            smoothing_method='dema',
+            smoothing_method="dema",
         )
 
         test_df = pd.concat([test_k, test_d], axis=1)
-        
+
         pd.testing.assert_frame_equal(test_df, ref_df)
 
     def test_slow_stoch_tema(self):
         test_k, test_d = slow_stoch(
-            self.short_source['close'],
-            self.short_source['high'],
-            self.short_source['low'],
+            self.short_source["close"],
+            self.short_source["high"],
+            self.short_source["low"],
             self.k_length,
             self.k_smoothing,
             self.d_smoothing,
-            smoothing_method='tema',
+            smoothing_method="tema",
         )
 
         test_df = pd.concat([test_k, test_d], axis=1)
 
         indexes = pd.Index(
             [
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
 
         ref_values = [
@@ -217,43 +229,45 @@ class TestSlowStoch(unittest.TestCase):
             [82.23666310675402, np.nan],
             [52.58018487262703, 58.190493820101594],
             [48.11325414081615, 47.974328438514036],
-            [39.31731477014041, 38.73704507119598]
+            [39.31731477014041, 38.73704507119598],
         ]
 
-        ref_df = pd.DataFrame(ref_values, index=indexes, columns=['%K', '%D'])
+        ref_df = pd.DataFrame(ref_values, index=indexes, columns=["%K", "%D"])
 
         pd.testing.assert_frame_equal(test_df, ref_df)
+
     def test_slow_stoch_rma(self):
         ref_k_indexes = pd.Index(
             [
-                '2017-08-31',
-                '2017-09-01',
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-08-31",
+                "2017-09-01",
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
 
         ref_d_indexes = pd.Index(
             [
-                '2017-09-02',
-                '2017-09-03',
-                '2017-09-04',
-                '2017-09-05',
-                '2017-09-06',
-                '2017-09-07',
-                '2017-09-08',
-                '2017-09-09',
-                '2017-09-10',
-            ], name='open_time',
+                "2017-09-02",
+                "2017-09-03",
+                "2017-09-04",
+                "2017-09-05",
+                "2017-09-06",
+                "2017-09-07",
+                "2017-09-08",
+                "2017-09-09",
+                "2017-09-10",
+            ],
+            name="open_time",
         )
-
 
         ref_k_values = pd.Series(
             [
@@ -267,8 +281,10 @@ class TestSlowStoch(unittest.TestCase):
                 74.58547203590467,
                 62.73073510490855,
                 55.90566496524739,
-                47.68692718472444
-            ], index = ref_k_indexes, name = '%K'
+                47.68692718472444,
+            ],
+            index=ref_k_indexes,
+            name="%K",
         )
 
         ref_d_values = pd.Series(
@@ -282,17 +298,19 @@ class TestSlowStoch(unittest.TestCase):
                 68.85091427946345,
                 64.53583117472476,
                 58.91952984472466,
-            ], index = ref_d_indexes, name = '%D'
+            ],
+            index=ref_d_indexes,
+            name="%D",
         )
 
         test_k, test_d = slow_stoch(
-            self.short_source['close'],
-            self.short_source['high'],
-            self.short_source['low'],
+            self.short_source["close"],
+            self.short_source["high"],
+            self.short_source["low"],
             self.k_length,
             self.k_smoothing,
             self.d_smoothing,
-            smoothing_method='rma',
+            smoothing_method="rma",
         )
 
         pd.testing.assert_series_equal(test_k, ref_k_values)
@@ -301,11 +319,11 @@ class TestSlowStoch(unittest.TestCase):
     def test_slow_stoch_invalid_method(self):
         with self.assertRaises(ValueError):
             slow_stoch(
-                self.short_source['close'],
-                self.short_source['high'],
-                self.short_source['low'],
+                self.short_source["close"],
+                self.short_source["high"],
+                self.short_source["low"],
                 self.k_length,
                 self.k_smoothing,
                 self.d_smoothing,
-                smoothing_method='invalid',
+                smoothing_method="invalid",
             )

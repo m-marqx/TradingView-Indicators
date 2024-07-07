@@ -30,8 +30,10 @@ class TestSMIO(unittest.TestCase):
                 -0.0022208095652088804,
                 -0.04643814522873069,
                 -0.025121318783773383,
-                -0.018804672815918785
-            ], index=range(24, 37), name="SMIO"
+                -0.018804672815918785,
+            ],
+            index=range(24, 37),
+            name="SMIO",
         )
 
         result = SMIO(
@@ -39,7 +41,7 @@ class TestSMIO(unittest.TestCase):
             long_length=self.long_length,
             short_length=self.short_length,
             signal_length=self.signal_length,
-            ma_method="sma"
+            ma_method="sma",
         )
 
         pd.testing.assert_series_equal(result, expected_result)
@@ -59,8 +61,10 @@ class TestSMIO(unittest.TestCase):
                 -0.004603580707847523,
                 -0.04452781559367561,
                 -0.023386574709263256,
-                -0.01395680596492259
-            ], index=range(24, 37), name="SMIO"
+                -0.01395680596492259,
+            ],
+            index=range(24, 37),
+            name="SMIO",
         )
 
         result = SMIO(
@@ -68,7 +72,7 @@ class TestSMIO(unittest.TestCase):
             long_length=self.long_length,
             short_length=self.short_length,
             signal_length=self.signal_length,
-            ma_method="ema"
+            ma_method="ema",
         )
 
         pd.testing.assert_series_equal(result, expected_result)
@@ -93,8 +97,10 @@ class TestSMIO(unittest.TestCase):
                 0.03715191104254778,
                 0.04659186566896591,
                 0.04402397777194027,
-                0.012004380888481284
-            ], index=range(24, 42), name="SMIO"
+                0.012004380888481284,
+            ],
+            index=range(24, 42),
+            name="SMIO",
         )
 
         result = SMIO(
@@ -102,7 +108,7 @@ class TestSMIO(unittest.TestCase):
             long_length=self.long_length,
             short_length=self.short_length,
             signal_length=self.signal_length,
-            ma_method="dema"
+            ma_method="dema",
         )
 
         pd.testing.assert_series_equal(result, expected_result)
@@ -137,8 +143,10 @@ class TestSMIO(unittest.TestCase):
                 -0.01146411314267011,
                 0.01723487483428201,
                 0.0027117296369333563,
-                0.017728337426081108
-                ], index=range(24, 52), name="SMIO"
+                0.017728337426081108,
+            ],
+            index=range(24, 52),
+            name="SMIO",
         )
 
         result = SMIO(
@@ -146,7 +154,7 @@ class TestSMIO(unittest.TestCase):
             long_length=self.long_length,
             short_length=self.short_length,
             signal_length=self.signal_length,
-            ma_method="tema"
+            ma_method="tema",
         )
 
         pd.testing.assert_series_equal(result, expected_result)
@@ -166,8 +174,10 @@ class TestSMIO(unittest.TestCase):
                 -0.012629140500918175,
                 -0.059853826546867245,
                 -0.040324698413669216,
-                -0.03029866612143188
-            ], index=range(24, 37), name="SMIO"
+                -0.03029866612143188,
+            ],
+            index=range(24, 37),
+            name="SMIO",
         )
 
         result = SMIO(
@@ -175,7 +185,7 @@ class TestSMIO(unittest.TestCase):
             long_length=self.long_length,
             short_length=self.short_length,
             signal_length=self.signal_length,
-            ma_method="rma"
+            ma_method="rma",
         )
 
         pd.testing.assert_series_equal(result, expected_result)
@@ -187,5 +197,5 @@ class TestSMIO(unittest.TestCase):
                 long_length=self.long_length,
                 short_length=self.short_length,
                 signal_length=self.signal_length,
-                ma_method="invalid"
+                ma_method="invalid",
             )

@@ -26,8 +26,10 @@ class TestTsi(unittest.TestCase):
                 0.004095268886733483,
                 0.010450859667488774,
                 0.004747140329672252,
-                -0.0010230090336899435
-            ], index=range(37, 47), name="TSI"
+                -0.0010230090336899435,
+            ],
+            index=range(37, 47),
+            name="TSI",
         )
 
         result = tsi(self.source, self.short_length, self.long_length, "sma")
@@ -46,8 +48,10 @@ class TestTsi(unittest.TestCase):
                 -0.003504231189196725,
                 0.008675016842811072,
                 0.00693257143011235,
-                0.0010370377682753253
-            ], index=range(37, 47), name="TSI"
+                0.0010370377682753253,
+            ],
+            index=range(37, 47),
+            name="TSI",
         )
 
         result = tsi(self.source, self.short_length, self.long_length, "ema")
@@ -66,8 +70,10 @@ class TestTsi(unittest.TestCase):
                 -0.003731082310130517,
                 -0.004003580330772648,
                 -0.004404342646217298,
-                -0.005012800877856322
-            ], index=range(73, 83), name="TSI"
+                -0.005012800877856322,
+            ],
+            index=range(73, 83),
+            name="TSI",
         )
 
         result = tsi(self.dema_source, self.short_length, self.long_length, "dema")
@@ -86,8 +92,10 @@ class TestTsi(unittest.TestCase):
                 0.0835918474059937,
                 -0.03852246192266579,
                 -0.021019087337841195,
-                -0.08148354659495585
-            ], index=range(109, 119), name="TSI"
+                -0.08148354659495585,
+            ],
+            index=range(109, 119),
+            name="TSI",
         )
 
         result = tsi(self.tema_source, self.short_length, self.long_length, "tema")
@@ -106,8 +114,10 @@ class TestTsi(unittest.TestCase):
                 0.02755343723614153,
                 0.02998261655449017,
                 0.028544027239623307,
-                0.025818486811049805
-            ], index=range(37, 47), name="TSI"
+                0.025818486811049805,
+            ],
+            index=range(37, 47),
+            name="TSI",
         )
 
         result = tsi(self.source, self.short_length, self.long_length, "rma")
