@@ -194,9 +194,6 @@ class TestSlowStoch(unittest.TestCase):
 
         indexes = pd.Index(
             [
-                '2017-08-30',
-                '2017-08-31',
-                '2017-09-01',
                 '2017-09-02',
                 '2017-09-03',
                 '2017-09-04',
