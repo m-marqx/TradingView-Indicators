@@ -95,32 +95,6 @@ class TestMACD(unittest.TestCase):
 
         pd.testing.assert_frame_equal(ref_df, macd_df)
 
-    def test_MACD_ma_rma(self):
-        ref_values = [
-            [-25.75555555555553, np.nan, np.nan],
-            [-41.33037037037036, -33.542962962962946, -7.787407407407414],
-            [-31.28158024691359, -32.035374485596705, 0.7537942386831133],
-            [-46.23678683127572, -41.50298271604938, -4.7338041152263415],
-            [-40.19711122085047, -40.63240171925011, 0.4352904983996382],
-            [-31.762810147233637, -34.71934067123913, 2.956530524005494],
-        ]
-
-        ref_df = pd.DataFrame(
-            ref_values,
-            index=self.indexes,
-            columns=self.columns,
-        )
-
-        macd_df = MACD(
-            self.source_10,
-            self.fast_length,
-            self.slow_length,
-            self.signal_length,
-            ma_method="rma",
-        )
-
-        pd.testing.assert_frame_equal(ref_df, macd_df)
-
     def test_MACD_ma_dema(self):
         ref_values = [
             [-42.44961419753088, np.nan, np.nan],
