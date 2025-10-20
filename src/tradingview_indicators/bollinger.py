@@ -98,23 +98,25 @@ def bollinger_trends(
                 DynamicTimeWarping(short_upper, long_upper)
                 .calculate_dtw_distance("ratio", True)
             )
+        case _:
+            raise InvalidArgumentError(
+                "stdev_method must be 'absolute', 'ratio', or 'dtw'."
+                f" got '{stdev_method}'."
+            )
 
     match diff_method:
         case "normal":
             return (
                 (lower_diff - upper_diff) / middle * 100
             ).rename("Bollinger Trend")
-
         case "absolute":
             return (
                 (lower_diff - upper_diff) - middle * 100
             ).rename("Bollinger Trend")
-
         case "ratio":
             return (
                 (lower_diff / upper_diff) / middle * 100
             ).rename("Bollinger Trend")
-
         case "dtw":
             middle = middle.iloc[short_length_index:]
 
@@ -136,3 +138,9 @@ def bollinger_trends(
                     )
                 ]
             ).rename("Bollinger Trend")
+
+        case _:
+            raise InvalidArgumentError(
+                "diff_method must be 'normal', 'absolute', 'ratio', or 'dtw'."
+                f" got '{diff_method}'."
+            )
