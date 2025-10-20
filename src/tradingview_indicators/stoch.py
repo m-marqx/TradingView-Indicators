@@ -1,6 +1,6 @@
 import pandas as pd
 
-def stoch(source, high, low, length) -> pd.Series:
+def stoch(source: pd.Series, high: pd.Series, low: pd.Series, length: int) -> pd.Series:
     """
     Calculate the Fast Stochastic Oscillator values for the given
     period length.
