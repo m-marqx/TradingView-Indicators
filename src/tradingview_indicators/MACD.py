@@ -1,5 +1,7 @@
 from typing import Literal
 import pandas as pd
+
+from .errors_exceptions import InvalidArgumentError
 from .moving_average import sma, ema, sema, rma
 from .utils import DynamicTimeWarping
 
@@ -57,7 +59,9 @@ def MACD(
             fast_ma = rma(source, fast_length)
             slow_ma = rma(source, slow_length)
         case _:
-            raise ValueError(f"'{ma_method}' is not a valid method.")
+            raise InvalidArgumentError(f"ma_method must be 'sma', 'ema', 'dema',"
+                f" 'tema', or 'rma', got '{ma_method}'.")
+
     match diff_method:
         case "absolute":
             macd = (fast_ma - slow_ma).dropna()
@@ -67,6 +71,11 @@ def MACD(
             macd = (
                 DynamicTimeWarping(fast_ma, slow_ma)
                 .calculate_dtw_distance("absolute", True)
+            )
+        case _:
+            raise InvalidArgumentError(
+                "diff_method must be 'absolute', 'ratio', or 'dtw',"
+                f" got '{diff_method}'."
             )
 
     match signal_method:
@@ -81,7 +90,10 @@ def MACD(
         case "rma":
             macd_signal = rma(macd, signal_length)
         case _:
-            raise ValueError(f"'{ma_method}' is not a valid method.")
+            raise InvalidArgumentError(
+                f"signal_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{signal_method}'."
+            )
 
     match diff_method:
         case "absolute":
@@ -92,6 +104,11 @@ def MACD(
             histogram = (
                 DynamicTimeWarping(macd, macd_signal)
                 .calculate_dtw_distance("absolute", True)
+            )
+        case _:
+            raise InvalidArgumentError(
+                "diff_method must be 'absolute', 'ratio', or 'dtw',"
+                f" got '{diff_method}'."
             )
 
     macd_df = pd.concat(

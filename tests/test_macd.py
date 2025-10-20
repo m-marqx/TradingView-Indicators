@@ -3,6 +3,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators import MACD
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 
 class TestMACD(unittest.TestCase):
@@ -164,3 +165,43 @@ class TestMACD(unittest.TestCase):
         macd_df.columns = self.columns
 
         pd.testing.assert_frame_equal(ref_df, macd_df)
+
+    def test_MACD_invalid_ma_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            MACD(
+                self.source_10,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                ma_method="invalid_ma",
+            )
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_ma'.",
+        )
+    def test_MACD_invalid_diff_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            MACD(
+                self.source_10,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                diff_method="invalid_diff",
+            )
+        self.assertEqual(
+            str(context.exception),
+            "diff_method must be 'absolute', 'ratio', or 'dtw', got 'invalid_diff'.",
+        )
+    def test_MACD_invalid_signal_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            MACD(
+                self.source_10,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                signal_method="invalid_signal",
+            )
+        self.assertEqual(
+            str(context.exception),
+            "signal_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_signal'.",
+        )
