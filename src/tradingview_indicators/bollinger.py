@@ -2,6 +2,7 @@ from typing import Literal
 import pandas as pd
 import numpy as np
 
+from .errors_exceptions import InvalidArgumentError
 from .moving_average import sma, ema, sema, rma
 from .utils import DynamicTimeWarping
 
@@ -15,18 +16,19 @@ def bollinger_bands(
     match ma_method:
         case "sma":
             basis = sma(source, length)
-
         case "ema":
             basis = ema(source, length)
-
         case "dema":
             basis = sema(source, length, 2)
-
         case "tema":
             basis = sema(source, length, 3)
-
         case "rma":
             basis = rma(source, length)
+        case _:
+            raise InvalidArgumentError(
+                "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{ma_method}'."
+            )
 
     deviation = mult * source.rolling(window=length).std()
 
@@ -61,9 +63,13 @@ def bollinger_trends(
     match based_on:
         case "short_length":
             middle = short_bands["basis"]
-
         case "long_length":
             middle = long_bands["basis"]
+        case _:
+            raise InvalidArgumentError(
+                "based_on must be 'short_length' or 'long_length'."
+                f" got '{based_on}'."
+            )
 
     short_length_index = short_length - 1
 

@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators.bollinger import bollinger_bands
-
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 class TestBollingerBands(unittest.TestCase):
     def setUp(self):
@@ -295,3 +295,17 @@ class TestBollingerBands(unittest.TestCase):
         ).iloc[9:19]
 
         pd.testing.assert_frame_equal(ref_df, test_df)
+
+    def test_bollinger_bands_invalid_ma_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            bollinger_bands(
+                self.source,
+                self.short_length,
+                self.stdev,
+                ma_method="invalid_method",
+            )
+
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_method'.",
+        )
