@@ -122,5 +122,10 @@ class TestTrix(unittest.TestCase):
         pd.testing.assert_series_equal(result, expected_result)
 
     def test_trix_invalid_method(self):
-        with self.assertRaises(InvalidArgumentError):
+        with self.assertRaises(InvalidArgumentError) as context:
             TRIX(self.source, self.length, self.signal_length, "invalid")
+
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
+        )

@@ -13,7 +13,7 @@ def TRIX(
     ma_method: Literal["sma", "ema", "dema", "tema", "rma"] = "ema",
 ) -> pd.DataFrame:
     """
-    Calculate the Triple Exponential Moving Average (TRIX) momentum 
+    Calculate the Triple Exponential Moving Average (TRIX) momentum
     oscillator indicator.
 
     Parameters:
@@ -48,32 +48,30 @@ def TRIX(
                 sma(sma(sma(trix_source, length), length), length)
                 .diff(signal_length)
             ) * 10000
-
         case "ema":
             trix = (
                 ema(ema(ema(trix_source, length), length), length)
                 .diff(signal_length)
             ) * 10000
-
         case "dema":
             trix = (
                 sema(sema(sema(trix_source, length, 2), length, 2), length, 2)
                 .diff(signal_length)
             ) * 10000
-
         case "tema":
             trix = (
                 sema(sema(sema(trix_source, length, 3), length, 3), length, 3)
                 .diff(signal_length)
             ) * 10000
-
         case "rma":
             trix = (
                 rma(rma(rma(trix_source, length), length), length)
                 .diff(signal_length)
             ) * 10000
-
         case _:
-            raise InvalidArgumentError(f"'{ma_method}' is not a valid method.")
+            raise InvalidArgumentError(
+                f"ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{ma_method}'."
+            )
 
     return trix.rename("TRIX")
