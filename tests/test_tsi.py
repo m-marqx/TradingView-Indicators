@@ -125,5 +125,10 @@ class TestTsi(unittest.TestCase):
         pd.testing.assert_series_equal(result, expected_result)
 
     def test_tsi_invalid_method(self):
-        with self.assertRaises(InvalidArgumentError):
+        with self.assertRaises(InvalidArgumentError) as context:
             tsi(self.source, self.short_length, self.long_length, "invalid")
+
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
+        )

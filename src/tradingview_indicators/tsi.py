@@ -51,7 +51,6 @@ def tsi(
             long_smoothed = sma(short_smoothed, long_length)
             absolute_short_smoothed = sma(absolute_PC, short_length)
             absolute_long_smoothed = sma(absolute_short_smoothed, long_length)
-
         case "ema":
             short_smoothed = ema(PC, short_length)
             long_smoothed = ema(short_smoothed, long_length)
@@ -77,7 +76,10 @@ def tsi(
             absolute_short_smoothed = rma(absolute_PC, short_length)
             absolute_long_smoothed = rma(absolute_short_smoothed, long_length)
         case _:
-            raise InvalidArgumentError(f"'{ma_method}' is not a valid method.")
+            raise InvalidArgumentError(
+                f"ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{ma_method}'."
+            )
 
     TSI = (long_smoothed / absolute_long_smoothed).rename("TSI")
 
