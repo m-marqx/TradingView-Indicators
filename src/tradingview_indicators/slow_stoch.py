@@ -1,5 +1,7 @@
 from typing import Literal
 import pandas as pd
+
+from .errors_exceptions import InvalidArgumentError
 from .stoch import stoch
 from .moving_average import sma, ema, sema, rma
 
@@ -45,24 +47,22 @@ def slow_stoch(
         case "sma":
             k = sma(stoch_source, k_smoothing)
             d = sma(k, d_smoothing)
-
         case "ema":
             k = ema(stoch_source, k_smoothing)
             d = ema(k, d_smoothing)
-
         case "dema":
             k = sema(stoch_source, k_smoothing, 2)
             d = sema(k, d_smoothing, 2)
-
         case "tema":
             k = sema(stoch_source, k_smoothing, 3)
             d = sema(k, d_smoothing, 3)
-
         case "rma":
             k = rma(stoch_source, k_smoothing)
             d = rma(k, d_smoothing)
-
         case _:
-            raise ValueError(f"Invalid smoothing method: {smoothing_method}")
+            raise InvalidArgumentError(
+                f"smoothing_method must be 'sma', 'ema', 'dema', 'tema',"
+                f" or 'rma', got '{smoothing_method}'."
+            )
 
     return k.rename("%K"), d.rename("%D")

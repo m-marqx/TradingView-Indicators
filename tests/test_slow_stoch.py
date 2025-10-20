@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators.slow_stoch import slow_stoch
-
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 class TestSlowStoch(unittest.TestCase):
     def setUp(self):
@@ -317,7 +317,7 @@ class TestSlowStoch(unittest.TestCase):
         pd.testing.assert_series_equal(test_d, ref_d_values)
 
     def test_slow_stoch_invalid_method(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InvalidArgumentError) as context:
             slow_stoch(
                 self.short_source["close"],
                 self.short_source["high"],
@@ -327,3 +327,7 @@ class TestSlowStoch(unittest.TestCase):
                 self.d_smoothing,
                 smoothing_method="invalid",
             )
+        self.assertEqual(
+            str(context.exception),
+            "smoothing_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
+        )
