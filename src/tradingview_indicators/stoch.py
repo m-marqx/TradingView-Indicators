@@ -23,10 +23,10 @@ def stoch(source: pd.Series, high: pd.Series, low: pd.Series, length: int) -> pd
         The Fast Stochastic Oscillator values.
     """
     lowest_low = low.rolling(length).min()
-    hightest_high = high.rolling(length).max()
+    highest_high = high.rolling(length).max()
     stochastic = (
         100
         * (source - lowest_low)
-        / (hightest_high - lowest_low)
+        / (highest_high - lowest_low)
     )
     return stochastic.rename("stoch")
