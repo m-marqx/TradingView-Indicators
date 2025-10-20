@@ -3,7 +3,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators.CCI import CCI
-
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 class TestCCI(unittest.TestCase):
     def setUp(self):
@@ -154,3 +154,12 @@ class TestCCI(unittest.TestCase):
         test_df = CCI(self.source, self.length, method="rma").astype("float64")
 
         pd.testing.assert_frame_equal(ref_df, test_df)
+
+    def test_CCI_invalid_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            CCI(self.source, self.length, method="invalid_method")
+
+        self.assertEqual(
+            str(context.exception),
+            "method must be 'sma', 'ema', 'sema', or 'rma', got 'invalid_method'.",
+        )

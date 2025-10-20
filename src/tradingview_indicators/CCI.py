@@ -58,8 +58,9 @@ def CCI(
             ma = rma(source, length)
         case _:
             raise InvalidArgumentError(
-            "Method must be 'sma', 'ema', 'sema', or 'rma'."
-        )
+            "method must be 'sma', 'ema', 'sema', or 'rma',"
+                f" got '{method}'."
+            )
 
     window = np.lib.stride_tricks.sliding_window_view(
         source_arr,
