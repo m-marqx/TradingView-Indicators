@@ -1,0 +1,13 @@
+[project]
+name = "tradingview-indicators"
+version = "1.0.0"
+description = "An accurate calculation of technical analysis indicators with values aligning with those in TradingView."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastdtw>=0.3.4",
+    "ipykernel>=7.0.1",
+    "numpy>=2.3.4",
+    "pandas[performance]>=2.3.3",
+    "pytest>=8.4.2",
+]
