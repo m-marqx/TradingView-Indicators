@@ -1,6 +1,6 @@
 [project]
 name = "tradingview-indicators"
-version = "1.0.0"
+version = "0.1.2"
 description = "An accurate calculation of technical analysis indicators with values aligning with those in TradingView."
 readme = "README.md"
 requires-python = ">=3.11"
