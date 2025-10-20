@@ -2,6 +2,8 @@ from typing import Literal
 import pandas as pd
 import numpy as np
 
+from .errors_exceptions import InvalidArgumentError
+
 def sma(source: pd.Series, length: int) -> pd.Series:
     """
     Calculate the Simple Moving Average (SMA)
@@ -201,4 +203,7 @@ def rma(
         case "pandas":
             return _rma_pandas(source, length)
         case _:
-            raise TypeError("method must be 'numpy' or 'pandas'")
+            raise InvalidArgumentError(
+                "method must be 'numpy' or 'pandas',"
+                f" got '{method}'."
+            )

@@ -3,6 +3,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators.moving_average import sma, ema, sema, rma
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 
 class TestMovingAverage(unittest.TestCase):
@@ -83,5 +84,9 @@ class TestMovingAverage(unittest.TestCase):
         pd.testing.assert_series_equal(result, expected_result)
 
     def test_rma_invalid_method(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(InvalidArgumentError) as context:
             rma(self.source, self.length, method="invalid")
+        self.assertEqual(
+            str(context.exception),
+            "method must be 'numpy' or 'pandas', got 'invalid'.",
+        )
