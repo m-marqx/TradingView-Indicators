@@ -156,7 +156,8 @@ class DynamicTimeWarping:
                 return x_series - y_series
             case _:
                 raise InvalidArgumentError(
-                    "method must be either 'ratio' or 'absolute'"
+                    "method must be 'ratio' or 'absolute'."
+                    f" got '{method}'."
                 )
 
     def align_dtw_distance(self):
