@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators import RSI
-
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 class TestRSI(unittest.TestCase):
     def setUp(self):
@@ -200,3 +200,12 @@ class TestRSI(unittest.TestCase):
         test_rsi = RSI(self.short_source["close"], self.length, "rma")
 
         pd.testing.assert_series_equal(test_rsi, ref_df)
+
+    def test_rsi_invalid_ma_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            RSI(self.short_source["close"], self.length, "invalid_method")
+
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_method'.",
+        )

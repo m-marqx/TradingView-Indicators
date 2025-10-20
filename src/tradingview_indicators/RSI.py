@@ -3,6 +3,7 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 
+from .errors_exceptions import InvalidArgumentError
 from .moving_average import sma, ema, sema, rma
 
 
@@ -45,6 +46,11 @@ def RSI(
             relative_strength = sema(upward_diff, periods, 3) / sema(downward_diff, periods, 3)
         case "rma":
             relative_strength = rma(upward_diff, periods) / rma(downward_diff, periods)
+        case _:
+            raise InvalidArgumentError(
+                "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{ma_method}'."
+            )
 
     rsi = 100 - (100 / (1 + relative_strength))
     return rsi.rename("RSI")
