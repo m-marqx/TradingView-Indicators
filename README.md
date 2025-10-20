@@ -8,8 +8,6 @@
 
 [🇧🇷 Versão em Português](https://github.com/m-marqx/TradingView-Indicators/blob/main/readme%20-%20pt-br.md)
 
----
-
 ## 🎯 Overview
 
 **TradingView Indicators** is an open-source Python library that provides highly accurate implementations of technical analysis indicators used in financial markets. Built with data engineering best practices, this library addresses critical accuracy issues found in existing solutions like TA-Lib and pandas-ta.
@@ -20,10 +18,7 @@
 - ⚡ **Optimized Performance** - Vectorized operations using NumPy and Pandas for processing 1M+ data points
 - 🧩 **Modular Architecture** - Clean, maintainable code following SOLID principles
 - 🧪 **Comprehensive Testing** - 12+ test suites ensuring reliability and accuracy
-- 📚 **Well Documented** - Clear API documentation with working examples
 - 🔧 **Type-Safe** - Full type hints support for better IDE integration
-
----
 
 ## 📦 Installation
 
@@ -36,10 +31,10 @@ pip install tradingview-indicators
 ### Requirements
 
 - Python 3.11+
-- pandas >= 2.3.3
+- fastdtw >= 0.3.4
 - numpy >= 2.3.4
-
----
+- pandas[performance] >= 2.3.3
+- pytest >= 8.4.2
 
 ## 🚀 Quick Start
 
@@ -72,26 +67,22 @@ df["BB_Middle"] = bb[1]
 df["BB_Lower"] = bb[2]
 ```
 
----
-
 ## 📊 Available Indicators
 
 | Indicator | Function | Description |
 |-----------|----------|-------------|
-| **Moving Averages** | `sma()`, `ema()`, `rma()`, `sema()` | Simple, Exponential, Rolling, Smoothed Moving Averages |
-| **RSI** | `RSI()` | Relative Strength Index with multiple MA methods |
+| **Moving Averages** | `sma()`, `ema()`, `rma()`, `sema()` | Simple, Exponential, Relative, Smoothed Moving Averages (DEMA, TEMA, and others) |
+| **RSI** | `RSI()` | Relative Strength Index |
 | **MACD** | `MACD()` | Moving Average Convergence Divergence |
 | **Bollinger Bands** | `bollinger_bands()`, `bollinger_trends()` | Volatility bands and trend analysis |
-| **Stochastic** | `stoch()`, `slow_stoch()` | Momentum oscillators |
-| **DMI/ADX** | `DMI()` | Directional Movement Index and Average Directional Index |
+| **Stochastic** | `stoch()`, `slow_stoch()` | Stochastic Oscillators |
+| **DMI/ADX** | `DMI()` | Directional Movement Index |
 | **CCI** | `CCI()` | Commodity Channel Index |
-| **Ichimoku** | `Ichimoku()` | Ichimoku Cloud indicator |
+| **Ichimoku** | `Ichimoku()` | Ichimoku Cloud  |
 | **TRIX** | `TRIX()` | Triple Exponential Average |
 | **TSI** | `tsi()` | True Strength Index |
-| **SMIO** | `SMIO()` | SMI Oscillator |
-| **Didi Index** | `didi_index()` | Brazilian technical analysis indicator |
-
----
+| **SMIO** | `SMIO()` | SMI Ergodic Oscillator |
+| **Didi Index** | `didi_index()` | Didi Index also known as Agulhada de Didi |
 
 ## 📁 Repository Structure
 
@@ -111,7 +102,7 @@ TradingView-Indicators/
 │       ├── ichimoku.py            # Ichimoku Cloud
 │       ├── TRIX.py                # Triple Exponential Average
 │       ├── tsi.py                 # True Strength Index
-│       ├── SMIO.py                # SMI Oscillator
+│       ├── SMIO.py                # SMI Ergodic Oscillator
 │       ├── didi_index.py          # Didi Index
 │       ├── utils.py               # Utility functions
 │       └── errors_exceptions.py   # Custom exceptions
@@ -138,7 +129,6 @@ TradingView-Indicators/
 #### 🔧 Source Code (`src/tradingview_indicators/`)
 The main package contains modular indicator implementations:
 - Each indicator is in its own file for maintainability
-- Consistent API design across all indicators
 - Type hints for better code quality and IDE support
 - Custom error handling for data validation
 
@@ -147,7 +137,6 @@ Comprehensive testing framework ensuring accuracy:
 - Unit tests for each indicator
 - Validation against TradingView outputs
 - Edge case handling
-- Regression testing
 
 #### 📚 Examples (`example/`)
 Practical usage demonstrations:
@@ -155,14 +144,12 @@ Practical usage demonstrations:
 - Sample cryptocurrency market data
 - Step-by-step calculation guides
 
----
-
 ## 🛠️ Technical Architecture
 
 ### Design Principles
 
 1. **Modularity** - Each indicator is self-contained and reusable
-2. **Accuracy** - All calculations validated against TradingView standards
+2. **Accuracy** - All calculations validated using TradingView values as reference
 3. **Performance** - Vectorized operations for efficient large-scale processing
 4. **Maintainability** - Clean code following PEP 8 and SOLID principles
 5. **Type Safety** - Comprehensive type hints for better developer experience
@@ -181,8 +168,6 @@ Raw Market Data (DataFrame/Series)
    Type-Safe Output (Series/DataFrame)
 ```
 
----
-
 ## 🎓 Use Cases
 
 - **Algorithmic Trading** - Build reliable trading strategies with accurate indicators
@@ -190,43 +175,30 @@ Raw Market Data (DataFrame/Series)
 - **Data Science** - Integrate with data pipelines for market research
 - **Backtesting** - Test trading strategies with precise historical calculations
 - **Education** - Learn technical analysis with production-grade implementations
-
----
+- **Machine Learning** - Calculate features for predictive models in finance
 
 ## 🧪 Testing
 
 Run the test suite:
 
 ```bash
-pytest tests/
+python -m pytest ./tests
 ```
 
 The library includes 12+ comprehensive test suites covering:
 - Indicator accuracy validation
 - Edge case handling
 - Data type validation
-- Performance benchmarks
-
----
 
 ## 🤝 Contributing
 
 Contributions are welcome! This project follows professional development standards:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-indicator`)
 3. Write tests for your changes
-4. Ensure all tests pass (`pytest`)
+4. Ensure all tests pass (`python -m pytest ./tests`)
 5. Follow PEP 8 style guidelines
 6. Submit a pull request
-
----
-
-## 📄 License
-
-[Your License Here]
-
----
 
 ## 🔗 Links
 
@@ -234,24 +206,12 @@ Contributions are welcome! This project follows professional development standar
 - **GitHub Repository**: [m-marqx/TradingView-Indicators](https://github.com/m-marqx/TradingView-Indicators)
 - **Issue Tracker**: [GitHub Issues](https://github.com/m-marqx/TradingView-Indicators/issues)
 
----
 
 ## 📧 Contact
 
-For questions, suggestions, or collaboration opportunities, please open an issue on GitHub.
+For questions, suggestions, or collaboration opportunities, please send me a message via GitHub or any of my social media channels listed on my profile.
 
----
 
-## 🙏 Acknowledgments
+## 💼 Use Case
 
-This project was created to address accuracy issues in existing technical analysis libraries and provide a production-ready solution for the financial data analysis community.
-
-**Technologies Used:**
-- Python 3.11+
-- Pandas (time-series analysis)
-- NumPy (vectorized operations)
-- pytest (testing framework)
-
----
-
-Made with ❤️ for the financial data analysis community
+I use this library for my financial needs of accurate and reliable technical analysis indicators to compute my variables in my machine learning models, such as in my project [ML-Miner](https://github.com/m-marqx/ML-Miner).
