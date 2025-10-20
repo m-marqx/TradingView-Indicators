@@ -209,15 +209,18 @@ def OHLC_finder(
     -----------
     dataframe : pd.DataFrame
         The DataFrame containing the source, high, and low data.
-    high : str, optional
+    Open : str
+        The column name in the DataFrame representing the open
+        data.
+    High : str, optional
         The column name in the DataFrame representing the high
-        data. If not provided, it will be inferred from common
-        column names.
-    low : str, optional
+        data. If not provided,
+        it will be inferred from common column names.
+    Low : str, optional
         The column name in the DataFrame representing the low
         data. If not provided, it will be inferred from common
         column names.
-    close: str, optional
+    Close : str, optional
         The column name in the DataFrame representing the close
         data. If not provided, it will be inferred from common
         column names.
