@@ -1,5 +1,7 @@
 from typing import Literal
 import pandas as pd
+
+from .errors_exceptions import InvalidArgumentError
 from .moving_average import sma, ema, sema, rma
 from .utils import DynamicTimeWarping
 
@@ -63,9 +65,9 @@ def didi_index(
             long_ma = rma(source, long_length)
 
         case _:
-            raise ValueError(
-                "Invalid method provided."
-                "Use 'sma', 'ema', 'dema', 'tema' or 'rma'."
+            raise InvalidArgumentError(
+                "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma'."
+                f" got '{ma_method}'."
             )
 
     if use_dtw:
@@ -87,6 +89,8 @@ def didi_index(
         short_didi = short_ma / mid_ma
         long_didi = long_ma / mid_ma
     else:
-        raise ValueError("Invalid method provided. Use 'absolute' or 'ratio'.")
+        raise InvalidArgumentError(
+            "method must be 'absolute' or 'ratio'." f" got '{method}'."
+        )
 
     return long_didi - short_didi

@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 from src.tradingview_indicators.didi_index import didi_index as DidiIndex
-
+from src.tradingview_indicators.errors_exceptions import InvalidArgumentError
 
 class TestDidiIndex(unittest.TestCase):
     def setUp(self):
@@ -516,3 +516,33 @@ class TestDidiIndex(unittest.TestCase):
         )
 
         pd.testing.assert_series_equal(test_values, ref_values)
+
+    def test_didi_index_invalid_ma_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            DidiIndex(
+                self.source,
+                self.short_length,
+                self.mid_length,
+                self.long_length,
+                method="invalid_method",
+            )
+
+        self.assertEqual(
+            str(context.exception),
+            "method must be 'absolute' or 'ratio'. got 'invalid_method'.",
+        )
+
+    def test_didi_index_invalid_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            DidiIndex(
+                self.source,
+                self.short_length,
+                self.mid_length,
+                self.long_length,
+                ma_method="invalid_method",
+            )
+
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma'. got 'invalid_method'.",
+        )
