@@ -1,0 +1,5 @@
+fastdtw>=0.3.4
+ipykernel>=7.0.1
+numpy>=2.3.4
+pandas[performance]>=2.3.3
+pytest>=8.4.2
