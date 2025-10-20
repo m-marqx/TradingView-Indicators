@@ -63,7 +63,10 @@ def SMIO(
         case "rma":
             sig = rma(erg, signal_length)
         case _:
-            raise InvalidArgumentError(f"'{ma_method}' is not a valid method.")
+            raise InvalidArgumentError(
+                f"ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma',"
+                f" got '{ma_method}'."
+            )
 
     smio = (erg - sig).rename("SMIO")
     return smio

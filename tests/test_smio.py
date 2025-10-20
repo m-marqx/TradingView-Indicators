@@ -191,7 +191,7 @@ class TestSMIO(unittest.TestCase):
         pd.testing.assert_series_equal(result, expected_result)
 
     def test_smio_invalid_method(self):
-        with self.assertRaises(InvalidArgumentError):
+        with self.assertRaises(InvalidArgumentError) as context:
             SMIO(
                 self.source,
                 long_length=self.long_length,
@@ -199,3 +199,7 @@ class TestSMIO(unittest.TestCase):
                 signal_length=self.signal_length,
                 ma_method="invalid",
             )
+        self.assertEqual(
+            str(context.exception),
+            "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
+        )
