@@ -261,8 +261,6 @@ def OHLC_finder(
             open_price = dataframe["Open"]
         elif "open" in dataframe.columns:
             open_price = dataframe["open"]
-        else:
-            open_price = None
     else:
         open_price = dataframe[Open]
 
@@ -271,8 +269,6 @@ def OHLC_finder(
             high_price = dataframe["High"]
         elif "high" in dataframe.columns:
             high_price = dataframe["high"]
-        else:
-            high_price = None
     else:
         high_price = dataframe[High]
 
@@ -281,8 +277,6 @@ def OHLC_finder(
             low_price = dataframe["Low"]
         elif "low" in dataframe.columns:
             low_price = dataframe["low"]
-        else:
-            low_price = None
     else:
         low_price = dataframe[Low]
 
@@ -291,8 +285,6 @@ def OHLC_finder(
             close_price = dataframe["Close"]
         elif "close" in dataframe.columns:
             close_price = dataframe["close"]
-        else:
-            close_price = None
     else:
         close_price = dataframe[Close]
 
