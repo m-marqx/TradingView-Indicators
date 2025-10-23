@@ -141,3 +141,73 @@ class TestBollingerBands(unittest.TestCase):
             str(context.exception),
             "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_method'.",
         )
+
+    def test_bollinger_trends_invalid_stdev_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            bollinger_trends(
+                self.source,
+                self.short_length,
+                self.stdev,
+                stdev_method="invalid_stdev",
+            )
+
+        self.assertIn("stdev_method must be 'absolute', 'ratio', or 'dtw'", str(context.exception))
+
+    def test_bollinger_trends_invalid_diff_method(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            bollinger_trends(
+                self.source,
+                self.short_length,
+                self.stdev,
+                diff_method="invalid_diff",
+            )
+
+        self.assertIn("diff_method must be 'normal', 'absolute', 'ratio', or 'dtw'", str(context.exception))
+
+    def test_bollinger_trends_invalid_based_on(self):
+        with self.assertRaises(InvalidArgumentError) as context:
+            bollinger_trends(
+                self.source,
+                self.short_length,
+                20,
+                self.stdev,
+                based_on="invalid_based",
+            )
+
+        self.assertIn("based_on must be 'short_length' or 'long_length'", str(context.exception))
+
+    def test_bollinger_trends_based_on_long_length(self):
+        result = bollinger_trends(
+            self.source,
+            self.short_length,
+            20,
+            self.stdev,
+            based_on="long_length",
+        )
+
+        self.assertIsInstance(result, pd.Series)
+        self.assertEqual(result.name, "Bollinger Trend")
+
+    def test_bollinger_trends_stdev_ratio(self):
+        result = bollinger_trends(
+            self.source,
+            self.short_length,
+            20,
+            self.stdev,
+            stdev_method="ratio",
+        )
+
+        self.assertIsInstance(result, pd.Series)
+        self.assertTrue(result.notna().any())
+
+    def test_bollinger_trends_diff_absolute(self):
+        result = bollinger_trends(
+            self.source,
+            self.short_length,
+            20,
+            self.stdev,
+            diff_method="absolute",
+        )
+
+        self.assertIsInstance(result, pd.Series)
+        self.assertTrue(result.notna().any())
