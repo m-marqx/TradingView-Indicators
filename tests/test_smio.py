@@ -203,3 +203,19 @@ class TestSMIO(unittest.TestCase):
             str(context.exception),
             "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
         )
+
+    def test_smio_dataframe_input_error(self):
+        rng = np.random.default_rng(seed=12345)
+        df = pd.DataFrame({
+            "close": rng.uniform(100, 500, 50),
+            "high": rng.uniform(100, 500, 50)
+        })
+
+        with self.assertRaises(TypeError) as context:
+            SMIO(
+                df,
+                long_length=self.long_length,
+                short_length=self.short_length,
+                signal_length=self.signal_length,
+            )
+        self.assertEqual(str(context.exception), "source can't be a DataFrame")
