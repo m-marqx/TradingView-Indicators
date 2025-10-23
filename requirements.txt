@@ -3,3 +3,4 @@ ipykernel>=7.0.1
 numpy>=2.3.4
 pandas[performance]>=2.3.3
 pytest>=8.4.2
+pytest-cov>=7.0.0

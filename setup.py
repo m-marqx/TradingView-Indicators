@@ -3,11 +3,10 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-# Read requirements
 with open("requirements.txt", "r") as req_file:
     requirements = [line.strip() for line in req_file if line.strip()]
 
-VERSION = '0.1.2'
+VERSION = '0.1.3.0'
 DESCRIPTION = 'An accurate calculation of technical analysis indicators with values aligning with those in TradingView.'
 
 setup(
