@@ -129,3 +129,15 @@ class TestTrix(unittest.TestCase):
             str(context.exception),
             "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
         )
+
+    def test_trix_dataframe_input_error(self):
+        np.random.seed(54321)
+        df = pd.DataFrame({
+            "close": np.random.randint(1, 500, 60),
+            "high": np.random.randint(1, 500, 60)
+        })
+
+        with self.assertRaises(TypeError) as context:
+            TRIX(df, self.length, self.signal_length, "ema")
+
+        self.assertEqual(str(context.exception), "source can't be a DataFrame")
