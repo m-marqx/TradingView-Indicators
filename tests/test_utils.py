@@ -140,3 +140,177 @@ class TestDynamicTimeWarping(unittest.TestCase):
         dtw_df = dtw.dtw_df
 
         self.assertEqual(len(dtw_df), 1)
+
+
+class TestOHLCFinder(unittest.TestCase):
+    def setUp(self):
+        rng = np.random.default_rng(seed=42069)
+
+        base_price = 100
+        self.n_rows = 50
+
+        close_prices = base_price + rng.normal(0, 5, self.n_rows).cumsum()
+        high_prices = close_prices + rng.uniform(0.5, 3, self.n_rows)
+        low_prices = close_prices - rng.uniform(0.5, 3, self.n_rows)
+        open_prices = close_prices + rng.uniform(-1, 1, self.n_rows)
+
+        self.df_lowercase = pd.DataFrame({
+            "open": open_prices,
+            "high": high_prices,
+            "low": low_prices,
+            "close": close_prices,
+        })
+
+        self.df_uppercase = pd.DataFrame({
+            "Open": open_prices,
+            "High": high_prices,
+            "Low": low_prices,
+            "Close": close_prices,
+        })
+
+        self.df_custom = pd.DataFrame({
+            "price_open": open_prices,
+            "price_high": high_prices,
+            "price_low": low_prices,
+            "price_close": close_prices,
+        })
+
+    def test_ohlc_finder_lowercase_columns(self):
+        open_p, high_p, low_p, close_p = OHLC_finder(self.df_lowercase)
+
+        pd.testing.assert_series_equal(open_p, self.df_lowercase["open"])
+        pd.testing.assert_series_equal(high_p, self.df_lowercase["high"])
+        pd.testing.assert_series_equal(low_p, self.df_lowercase["low"])
+        pd.testing.assert_series_equal(close_p, self.df_lowercase["close"])
+
+    def test_ohlc_finder_uppercase_columns(self):
+        open_p, high_p, low_p, close_p = OHLC_finder(self.df_uppercase)
+
+        pd.testing.assert_series_equal(open_p, self.df_uppercase["Open"])
+        pd.testing.assert_series_equal(high_p, self.df_uppercase["High"])
+        pd.testing.assert_series_equal(low_p, self.df_uppercase["Low"])
+        pd.testing.assert_series_equal(close_p, self.df_uppercase["Close"])
+
+    def test_ohlc_finder_custom_columns(self):
+        open_p, high_p, low_p, close_p = OHLC_finder(
+            self.df_custom,
+            Open="price_open",
+            High="price_high",
+            Low="price_low",
+            Close="price_close"
+        )
+
+        pd.testing.assert_series_equal(open_p, self.df_custom["price_open"])
+        pd.testing.assert_series_equal(high_p, self.df_custom["price_high"])
+        pd.testing.assert_series_equal(low_p, self.df_custom["price_low"])
+        pd.testing.assert_series_equal(close_p, self.df_custom["price_close"])
+
+    def test_ohlc_finder_partial_custom_columns(self):
+        df_mixed = self.df_lowercase.copy()
+        df_mixed["volume"] = np.random.default_rng(seed=31415).uniform(1000, 10000, self.n_rows)
+
+        open_p, high_p, low_p, close_p = OHLC_finder(
+            df_mixed,
+            Close="close"
+        )
+
+        pd.testing.assert_series_equal(open_p, df_mixed["open"])
+        pd.testing.assert_series_equal(high_p, df_mixed["high"])
+        pd.testing.assert_series_equal(low_p, df_mixed["low"])
+        pd.testing.assert_series_equal(close_p, df_mixed["close"])
+
+    def test_ohlc_finder_missing_columns_raises_error(self):
+        df_no_ohlc = pd.DataFrame({
+            "price": np.random.default_rng(seed=27182).uniform(90, 110, 20),
+            "volume": np.random.default_rng(seed=27183).uniform(1000, 10000, 20)
+        })
+
+        with self.assertRaises(ValueError) as context:
+            OHLC_finder(df_no_ohlc)
+
+        self.assertIn("OHLC columns not found", str(context.exception))
+
+    def test_ohlc_finder_not_dataframe_raises_error(self):
+        not_a_df = [1, 2, 3, 4]
+
+        with self.assertRaises(ValueError) as context:
+            OHLC_finder(not_a_df)
+
+        self.assertIn("dataframe param must be a DataFrame", str(context.exception))
+
+    def test_ohlc_finder_with_none_values(self):
+        open_p, high_p, low_p, close_p = OHLC_finder(
+            self.df_uppercase,
+            Open=None,
+            High=None,
+            Low=None,
+            Close=None
+        )
+
+        pd.testing.assert_series_equal(open_p, self.df_uppercase["Open"])
+        pd.testing.assert_series_equal(high_p, self.df_uppercase["High"])
+        pd.testing.assert_series_equal(low_p, self.df_uppercase["Low"])
+        pd.testing.assert_series_equal(close_p, self.df_uppercase["Close"])
+
+    def test_ohlc_finder_uppercase_priority(self):
+        rng = np.random.default_rng(seed=12345)
+        df_both = pd.DataFrame({
+            "Open": rng.uniform(100, 110, 10),
+            "High": rng.uniform(110, 120, 10),
+            "Low": rng.uniform(90, 100, 10),
+            "Close": rng.uniform(100, 110, 10),
+            "open": rng.uniform(50, 60, 10),
+            "high": rng.uniform(60, 70, 10),
+            "low": rng.uniform(40, 50, 10),
+            "close": rng.uniform(50, 60, 10),
+        })
+
+        open_p, high_p, low_p, close_p = OHLC_finder(df_both)
+
+        pd.testing.assert_series_equal(open_p, df_both["Open"])
+        pd.testing.assert_series_equal(high_p, df_both["High"])
+        pd.testing.assert_series_equal(low_p, df_both["Low"])
+        pd.testing.assert_series_equal(close_p, df_both["Close"])
+
+    def test_ohlc_finder_with_additional_columns(self):
+        rng = np.random.default_rng(seed=98765)
+        df_extra = self.df_lowercase.copy()
+        df_extra["volume"] = rng.uniform(1000, 10000, self.n_rows)
+        df_extra["timestamp"] = pd.date_range("2023-01-01", periods=self.n_rows)
+        df_extra["symbol"] = "BTC/USD"
+
+        open_p, high_p, low_p, close_p = OHLC_finder(df_extra)
+
+        pd.testing.assert_series_equal(open_p, df_extra["open"])
+        pd.testing.assert_series_equal(high_p, df_extra["high"])
+        pd.testing.assert_series_equal(low_p, df_extra["low"])
+        pd.testing.assert_series_equal(close_p, df_extra["close"])
+
+    def test_ohlc_finder_single_row(self):
+        rng = np.random.default_rng(seed=11111)
+        df_single = pd.DataFrame({
+            "open": [rng.uniform(100, 110)],
+            "high": [rng.uniform(110, 120)],
+            "low": [rng.uniform(90, 100)],
+            "close": [rng.uniform(100, 110)],
+        })
+
+        open_p, high_p, low_p, close_p = OHLC_finder(df_single)
+
+        self.assertEqual(len(open_p), 1)
+        self.assertEqual(len(high_p), 1)
+        self.assertEqual(len(low_p), 1)
+        self.assertEqual(len(close_p), 1)
+
+    def test_ohlc_finder_preserves_index(self):
+        custom_index = pd.date_range("2023-01-01", periods=self.n_rows, freq="D")
+        df_indexed = self.df_lowercase.copy()
+        df_indexed.index = custom_index
+
+        open_p, high_p, low_p, close_p = OHLC_finder(df_indexed)
+
+        pd.testing.assert_index_equal(open_p.index, custom_index)
+        pd.testing.assert_index_equal(high_p.index, custom_index)
+        pd.testing.assert_index_equal(low_p.index, custom_index)
+        pd.testing.assert_index_equal(close_p.index, custom_index)
+
