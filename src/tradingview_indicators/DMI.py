@@ -47,28 +47,28 @@ class DMI:
         if not isinstance(dataframe, pd.DataFrame):
             raise ValueError("dataframe param must be a DataFrame")
 
-        ohlc_columns_lowercase = ['high', 'low', 'close']
-        ohlc_columns_uppercase = ['High', 'Low', 'Close']
+        hlc_columns_lowercase = ['high', 'low', 'close']
+        hlc_columns_uppercase = ['High', 'Low', 'Close']
         source_columns = [close, high, low]
 
         is_na_source = all(
-            close is None
-            for close in source_columns
+            source_name is None
+            for source_name in source_columns
         )
 
         is_hlc_columns_lowercase = all(
             column in dataframe.columns
-            for column in ohlc_columns_lowercase
+            for column in hlc_columns_lowercase
         )
 
-        is_ohlc_columns_uppercase = all(
+        is_hlc_columns_uppercase = all(
             column in dataframe.columns
-            for column in ohlc_columns_uppercase
+            for column in hlc_columns_uppercase
         )
 
         columns_not_found = (
             not is_hlc_columns_lowercase
-            and not is_ohlc_columns_uppercase
+            and not is_hlc_columns_uppercase
         )
 
         if is_na_source and columns_not_found:
@@ -79,8 +79,6 @@ class DMI:
                 self.close = dataframe["Close"]
             elif "close" in dataframe.columns:
                 self.close = dataframe["close"]
-            else:
-                self.close = None
         else:
             self.close = dataframe[close]
 
@@ -89,8 +87,6 @@ class DMI:
                 self.high = dataframe["High"]
             elif "high" in dataframe.columns:
                 self.high = dataframe["high"]
-            else:
-                self.high = None
         else:
             self.high = dataframe[high]
 
@@ -99,8 +95,6 @@ class DMI:
                 self.low = dataframe["Low"]
             elif "low" in dataframe.columns:
                 self.low = dataframe["low"]
-            else:
-                self.low = None
         else:
             self.low = dataframe[low]
 
