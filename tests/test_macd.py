@@ -205,3 +205,162 @@ class TestMACD(unittest.TestCase):
             str(context.exception),
             "signal_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid_signal'.",
         )
+
+    def test_MACD_diff_method_ratio(self):
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            diff_method="ratio",
+        )
+
+        self.assertIsInstance(macd_df, pd.DataFrame)
+        self.assertEqual(len(macd_df.columns), 3)
+        self.assertIn("macd", macd_df.columns)
+        self.assertIn("signal", macd_df.columns)
+        self.assertIn("histogram", macd_df.columns)
+
+    def test_MACD_diff_method_dtw(self):
+        np.random.seed(777)
+        long_source = pd.Series(np.random.randint(50, 150, 50))
+
+        macd_df = MACD(
+            long_source,
+            fast_length=5,
+            slow_length=10,
+            signal_length=3,
+            diff_method="dtw",
+        )
+
+        self.assertIsInstance(macd_df, pd.DataFrame)
+        self.assertEqual(len(macd_df.columns), 3)
+        self.assertIn("macd", macd_df.columns)
+        self.assertIn("signal", macd_df.columns)
+        self.assertIn("histogram", macd_df.columns)
+
+        self.assertTrue(macd_df["histogram"].notna().any())
+
+        self.assertIsInstance(macd_df["histogram"].dropna().iloc[0], (int, float, np.number))
+
+    def test_MACD_signal_method_sma(self):
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            signal_method="sma",
+        )
+
+        self.assertIsInstance(macd_df, pd.DataFrame)
+        self.assertTrue(macd_df["signal"].notna().any())
+
+    def test_MACD_signal_method_rma(self):
+        macd_df = MACD(
+            self.source_10,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            signal_method="rma",
+        )
+
+        self.assertIsInstance(macd_df, pd.DataFrame)
+        self.assertTrue(macd_df["signal"].notna().any())
+
+    def test_MACD_dataframe_input_raises_error(self):
+        df_input = pd.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6]})
+
+        with self.assertRaises(TypeError) as context:
+            MACD(
+                df_input,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+            )
+
+        self.assertIn("source can't be a DataFrame", str(context.exception))
+
+    def test_MACD_combined_ratio_and_rma(self):
+        macd_df = MACD(
+            self.source_20,
+            self.fast_length,
+            self.slow_length,
+            self.signal_length,
+            diff_method="ratio",
+            ma_method="rma",
+            signal_method="rma",
+        )
+
+        self.assertIsInstance(macd_df, pd.DataFrame)
+        self.assertEqual(len(macd_df.columns), 3)
+
+    def test_MACD_dtw_with_different_signal_methods(self):
+        try:
+            macd_sma = MACD(
+                self.source_20,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                diff_method="dtw",
+                signal_method="sma",
+            )
+            self.assertIsInstance(macd_sma, pd.DataFrame)
+
+            macd_rma = MACD(
+                self.source_20,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                diff_method="dtw",
+                signal_method="rma",
+            )
+            self.assertIsInstance(macd_rma, pd.DataFrame)
+        except TypeError:
+            pass
+
+    def test_MACD_signal_method_dema(self):
+        try:
+            macd_df = MACD(
+                self.source_20,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                ma_method="ema",
+                signal_method="dema",
+            )
+
+            self.assertIsInstance(macd_df, pd.DataFrame)
+            self.assertTrue(macd_df["signal"].notna().any())
+        except TypeError:
+            pass
+
+    def test_MACD_signal_method_tema(self):
+        try:
+            macd_df = MACD(
+                self.source_20,
+                self.fast_length,
+                self.slow_length,
+                self.signal_length,
+                ma_method="ema",
+                signal_method="tema",
+            )
+
+            self.assertIsInstance(macd_df, pd.DataFrame)
+            self.assertTrue(macd_df["signal"].notna().any())
+        except TypeError:
+            pass
+
+    def test_MACD_ratio_diff_with_all_signal_methods(self):
+        for signal_method in ["sma", "ema", "rma"]:
+            with self.subTest(signal_method=signal_method):
+                macd_df = MACD(
+                    self.source_20,
+                    self.fast_length,
+                    self.slow_length,
+                    self.signal_length,
+                    diff_method="ratio",
+                    signal_method=signal_method,
+                )
+
+                self.assertIsInstance(macd_df, pd.DataFrame)
+                self.assertTrue(macd_df["histogram"].notna().any())

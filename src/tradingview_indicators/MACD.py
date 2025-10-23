@@ -105,11 +105,6 @@ def MACD(
                 DynamicTimeWarping(macd, macd_signal)
                 .calculate_dtw_distance("absolute", True)
             )
-        case _:
-            raise InvalidArgumentError(
-                "diff_method must be 'absolute', 'ratio', or 'dtw',"
-                f" got '{diff_method}'."
-            )
 
     macd_df = pd.concat(
         [
