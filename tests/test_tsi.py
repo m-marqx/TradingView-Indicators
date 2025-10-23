@@ -132,3 +132,15 @@ class TestTsi(unittest.TestCase):
             str(context.exception),
             "ma_method must be 'sma', 'ema', 'dema', 'tema', or 'rma', got 'invalid'.",
         )
+
+    def test_tsi_dataframe_input_error(self):
+        np.random.seed(98765)
+        df = pd.DataFrame({
+            "close": np.random.randint(1, 500, 47),
+            "high": np.random.randint(1, 500, 47)
+        })
+
+        with self.assertRaises(TypeError) as context:
+            tsi(df, self.short_length, self.long_length, "ema")
+
+        self.assertEqual(str(context.exception), "source can't be a DataFrame")
