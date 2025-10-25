@@ -425,44 +425,68 @@ class TestIchimoku(unittest.TestCase):
         for col in result.columns:
             self.assertFalse(np.isinf(result[col]).any())
 
-    def test_ichimoku_with_single_period(self):
-        result = Ichimoku(
-            self.df_uppercase,
-            conversion_periods=1,
-            base_periods=1,
-            lagging_span_2_periods=1,
-            displacement=1
-        )
-
-        self.assertIsInstance(result, pd.DataFrame)
-        self.assertEqual(result["conversion_line"].notna().sum(), len(self.df_uppercase))
-
-    def test_ichimoku_with_volatile_data(self):
+    def test_ichimoku_values(self):
         rng = np.random.default_rng(seed=369258)
-        n_rows = 100
+        n_rows = 20
 
-        close_prices = 1000 + rng.normal(0, 50, n_rows).cumsum()
-        high_prices = close_prices + rng.uniform(10, 100, n_rows)
-        low_prices = close_prices - rng.uniform(10, 100, n_rows)
-        open_prices = close_prices + rng.uniform(-30, 30, n_rows)
+        close_prices = rng.integers(10, 40, n_rows)
+        high_prices = close_prices + rng.integers(10, 40, n_rows)
+        low_prices = close_prices - rng.integers(10, 40, n_rows)
+        open_prices = close_prices + rng.integers(10, 40, n_rows)
 
-        df_volatile = pd.DataFrame({
-            "open": open_prices,
-            "close": close_prices,
-            "high": high_prices,
-            "low": low_prices,
-        })
+        df_volatile = pd.DataFrame(
+            {
+                "open": open_prices,
+                "close": close_prices,
+                "high": high_prices,
+                "low": low_prices,
+            }
+        )
 
         result = Ichimoku(
             df_volatile,
-            self.conversion_periods,
-            self.base_periods,
-            self.lagging_span_2_periods,
-            self.displacement
+            8,
+            12,
+            4,
+            8,
         )
 
-        self.assertIsInstance(result, pd.DataFrame)
-        self.assertFalse(result.isnull().all().any())
+        ref_values = pd.DataFrame(
+            [
+                [np.nan, np.nan, 12.0, np.nan, np.nan, np.nan, np.nan],
+                [np.nan, np.nan, 12.0, np.nan, np.nan, np.nan, np.nan],
+                [np.nan, np.nan, 13.0, np.nan, np.nan, np.nan, np.nan],
+                [np.nan, np.nan, 36.0, np.nan, 15.0, np.nan, np.nan],
+                [np.nan, np.nan, 19.0, np.nan, 16.5, np.nan, np.nan],
+                [np.nan, np.nan, 22.0, np.nan, 28.0, np.nan, np.nan],
+                [np.nan, np.nan, 33.0, np.nan, 30.5, np.nan, np.nan],
+                [16.5, np.nan, 22.0, np.nan, 27.0, np.nan, np.nan],
+                [16.5, np.nan, 19.0, np.nan, 18.0, np.nan, np.nan],
+                [20.0, np.nan, 15.0, np.nan, 15.5, np.nan, np.nan],
+                [25.0, np.nan, 29.0, np.nan, 25.0, np.nan, 15.0],
+                [25.0, 21.5, 38.0, 23.25, 25.0, np.nan, 16.5],
+                [25.0, 21.5, 28.0, 23.25, 25.0, np.nan, 28.0],
+                [25.0, 25.0, np.nan, 25.0, 26.0, np.nan, 30.5],
+                [25.0, 25.0, np.nan, 25.0, 19.5, np.nan, 27.0],
+                [25.0, 25.0, np.nan, 25.0, 19.5, np.nan, 18.0],
+                [21.0, 21.0, np.nan, 21.0, 14.0, np.nan, 15.5],
+                [21.0, 21.0, np.nan, 21.0, 21.0, np.nan, 25.0],
+                [21.0, 21.0, np.nan, 21.0, 21.0, 23.25, 25.0],
+                [21.0, 21.0, np.nan, 21.0, 21.0, 23.25, 25.0],
+            ],
+            columns=[
+                "conversion_line",
+                "base_line",
+                "lagging_span",
+                "lead_line1",
+                "lead_line2",
+                "leading_span_a",
+                "leading_span_b",
+            ],
+            index=result.index,
+        )
+
+        pd.testing.assert_frame_equal(result, ref_values)
 
 
 if __name__ == "__main__":
