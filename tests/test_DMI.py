@@ -122,16 +122,56 @@ class TestDMI(unittest.TestCase):
             self.assertGreaterEqual(tr.loc[idx], high_low_range.loc[idx])
 
     def test_adx_calculation(self):
-        dmi = DMI(self.df_lowercase)
+        rng = np.random.default_rng(seed=13370)
+
+        n_rows = 35
+
+        close_prices = rng.integers(10, 40, n_rows)
+        high_prices = close_prices + rng.integers(10, 40, n_rows)
+        low_prices = close_prices - rng.integers(10, 40, n_rows)
+        open_prices = close_prices + rng.integers(10, 40, n_rows)
+
+        df_lowercase = pd.DataFrame(
+            {
+                "open": open_prices,
+                "high": high_prices,
+                "low": low_prices,
+                "close": close_prices,
+            }
+        )
+
+        dmi = DMI(df_lowercase)
         adx, plus_di, minus_di = dmi.adx()
+        results = pd.concat([plus_di, minus_di, adx], axis=1)
 
-        self.assertIsInstance(adx, pd.Series)
-        self.assertIsInstance(plus_di, pd.Series)
-        self.assertIsInstance(minus_di, pd.Series)
-
-        self.assertEqual(adx.name, "ADX")
-        self.assertEqual(plus_di.name, "DI+")
-        self.assertEqual(minus_di.name, "DI-")
+        ref_values = pd.DataFrame(
+            [
+                [15.69767441860465, 10.029069767441861, np.nan],
+                [15.129310344827585, 9.665948275862068, np.nan],
+                [16.295521653543304, 8.966689222440944, np.nan],
+                [15.325426670523575, 8.432889788834249, np.nan],
+                [14.033548406511816, 9.829437502605735, np.nan],
+                [13.000850013469176, 11.35879922769426, np.nan],
+                [13.31509431506088, 10.462019081306504, np.nan],
+                [12.437208622294852, 9.772241250853174, np.nan],
+                [13.722090452938541, 9.124380325553886, np.nan],
+                [12.788308989056922, 11.830335452737334, np.nan],
+                [13.985305054746387, 10.635262432064467, np.nan],
+                [13.039601287175893, 9.916092724165184, np.nan],
+                [12.862906073078179, 9.437970825054178, np.nan],
+                [12.023933464783074, 10.490912586627058, 15.988767530909048],
+                [11.082547226113341, 11.175179577694452, 14.876439896395954],
+                [12.197616172710154, 10.462664267327394, 14.360719669870223],
+                [11.448929737633566, 14.11705009259875, 14.08039783314686],
+                [13.78594168658026, 12.901776493829875, 13.311298279504419],
+                [12.963639424374078, 12.132212815225156, 12.597134408265006],
+                [14.409440750665965, 10.975273812843847, 12.663659348053047],
+                [13.768722920411722, 10.487256703402142, 12.725432506427653],
+            ],
+            columns=["DI+", "DI-", "ADX"],
+            index=range(14, 35),
+        )
+        pd.testing.assert_frame_equal(ref_values, results)
 
     def test_adx_calculation_with_custom_parameters(self):
         dmi = DMI(self.df_uppercase)
